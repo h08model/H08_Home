@@ -1,0 +1,58 @@
+﻿#!/bin/sh
+############################################################
+#to   generate dam map
+#by   2010/07/21, hanasaki, NIES: H08ver0.5
+############################################################
+# set
+############################################################
+PRJ=H06_                                      # ORG for dam_cov/dam_gov
+RUN=____                                      # RUN for dam_cov/dam_gov
+SUF=.one                                      # Suffix
+#
+OPT=all                                       # Option for prog_damalc
+YEARDAM=2000                                  # Year for dam
+YEARDIS=0000                                  # Year for discharge
+#
+NL=64800                                      # Total num of grid cells
+DAMDBG=2232                                   # Debugging dam
+CNTMAX=10                                     # maximum downstream grid cells
+REC=1000                                      # maximum records   
+############################################################
+# in
+############################################################
+RIVNXL=../../map/out/riv_nxl_/rivnxl.GSWP2.one # river downstream l
+RIVSEQ=../../map/out/riv_seq_/rivseq.GSWP2.one # river sequence
+DAMCAP=../../map/dat/dam_cap_/H06_____.one    # dam capacity
+DAMID_=../../map/dat/dam_id__/H06_____.one    # dam id
+DAMNUM=../../map/dat/dam_num_/H06_____.one    # number of dams 
+DAMPRP=../../map/dat/dam_prp_/H06_____.one    # dam purpose
+RIVOUT=../../riv/out/riv_out_/GSW2LR__.oneMO  # river discharge
+############################################################
+# out
+############################################################
+DIRDAMD2S=../../map/out/dam_d2s_            #
+DIRDAMD2D=../../map/out/dam_d2d_            #
+DIRDAMUP_=../../map/out/dam_up__            #
+DIRDAMUPC=../../map/out/dam_upc_            #
+DIRDAMALC=../../map/out/dam_alc_            #
+DAMD2D=${DIRDAMD2D}/$PRJ$RUN${SUF}ID        # dam gov. grid cells (Dam to Dam)
+DAMD2S=${DIRDAMD2S}/$PRJ$RUN${SUF}ID        # dam gov. grid cells (Dam to Sea)
+DAMUP_=${DIRDAMUP_}/$PRJ$RUN${SUF}          # Number of dams in upper stream 
+DAMUPC=${DIRDAMUPC}/$PRJ$RUN${SUF}          # Cpacity of dams in upper stream
+DAMALC=${DIRDAMALC}/$PRJ$RUN${SUF}ID        # Dam allocation
+############################################################
+# make directory
+############################################################
+if [ ! -d $DIRDAMD2S ]; then mkdir -p $DIRDAMD2S; fi
+if [ ! -d $DIRDAMD2D ]; then mkdir -p $DIRDAMD2D; fi
+if [ ! -d $DIRDAMUP_ ]; then mkdir -p $DIRDAMUP_; fi
+if [ ! -d $DIRDAMUPC ]; then mkdir -p $DIRDAMUPC; fi
+if [ ! -d $DIRDAMALC ]; then mkdir -p $DIRDAMALC; fi
+############################################################
+# job
+############################################################
+calc_damgov $NL     $DAMDBG $CNTMAX   $RIVNXL \
+            $RIVSEQ $DAMID_ $DAMNUM   $DAMCAP \
+            $DAMD2S $DAMD2D $DAMUP_   $DAMUPC
+calc_damalc $NL     $REC    $YEARDIS  $DAMDBG   $OPT \
+            $DAMID_ $DAMPRP $DAMD2D   $RIVOUT $DAMALC

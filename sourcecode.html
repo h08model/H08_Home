@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0
+ Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="GENERATOR" content="JustSystems Homepage Builder Version 15.0.12.0 for Windows" />
+<title>H08 | Source code</title>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	var nav = $('.nav');	
+	var navTop = nav.offset().top;
+	$(window).scroll(function () {
+		var winTop = $(this).scrollTop();
+		if (winTop >= navTop) {
+			nav.addClass('fixed')
+		} else if (winTop <= navTop) {
+			nav.removeClass('fixed')
+		}
+	});
+	//サブナビゲーション
+	$('li', nav).hover(function(){
+		$('ul',this).slideDown('fast');
+	},
+	function(){
+		$('ul',this).slideUp('fast');
+	});
+});
+</script>
+<link href="h08.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+<body>
+<div id="header"><a href="https://www.nies.go.jp/index.html" target="_blank"><img src="pictures/NIES_logo_01.png" alt="NIES" width="65" height="33" border="0" align="right" /></a>
+
+<a href="index.html"><img src="pictures/H08_logo_01.png" alt="2013 NIES Comference" width="251" height="116" border="0" /></a></div>
+<div class="nav"><ul class="clearfix">
+		<li><a href="index.html">HOME</a></li>
+		<li><a href="introduction.html">Introduction</a></li>
+		<li><a href="manual.html">Manuals</a></li>
+		<li><a href="sourcecode.html">Source code</a></li>
+		<li><a href="input.html">Input Data</a></li>
+       	<li><a href="bugs_update.html">Bugs &amp; Update</a></li>
+       	<li><a href="faq.html">FAQ</a></li>
+       	<li><a href="publication.html">Publications</a></li>
+       	<li><a href="viewer.html">Viewer</a></li>
+  </ul></div>
+<div id="e_j_box">
+  <div align="right">
+<a href="sourcecode.html">English</a> / <a href="sourcecode_j.html">Japanese </a></div>
+</div>
+<div id="image_picture">
+</div>
+<div id="article"><!-- /#article -->
+
+<h1>Source code</h1>
+<p><!--The source code of H08 is freely available under its <a href="files/licence_en.pdf" target="_blank">terms and conditions</a> (see also <a href="files/policy_en.pdf" target="_blank">policy of disclosure</a>).--> Source code of H08 is freely available on <a href="https://github.com/h08model/H08" target="_blank">GitHub</a> [From Dec 1 2023]. 
+
+</div>
+
+<div id="footer_box">
+  <div align="center">Copyright © 2013-2026 National Institute for Environmental Studies. All Rights Reserved.</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1320 @@
+﻿#!/bin/sh
+############################################################
+#to   run the coupled model
+#by   2010/09/30, hanasaki, NIES: H08ver1.0
+############################################################
+# Edit here (basic)
+############################################################
+PRJ=GSW2                # Project name
+RUN=LECD                # Run name 
+SUF=.one                # Suffix
+MAP=.GSWP2              # Map
+#
+YEARMIN=1986                # start year  
+YEARMAX=1986                # end year    
+SECINT=86400            # interval
+LDBG=27641              # debugging point
+#
+SPNFLG=0                # spinup flag
+SPNERR=0.05             # spinup error torrelance
+SPNRAT=0.95             # spinup threshold
+ENGBALC=1.0             # energy inbalance tolerance
+WATBALC=0.1             # water inbalance tolerance
+CNTC=1000               # maximum iteration
+#
+PROG=./main
+############################################################
+# Edit here (mosaic)
+############################################################
+NOFMOS=3                # number of mosaic (sub-grid cell)
+#
+ARAFRC1=../../map/dat/irg_frcd/irgfrc.dbl.DS02${SUF}
+ARAFRC2=../../map/dat/irg_frcs/irgfrc.sgl.DS02${SUF}
+ARAFRC3=../../map/dat/non_frc_/nonfrc.DS02${SUF}
+#
+OPTLNDUSE1=dci          # dci for double crop irrigated
+OPTLNDUSE2=sci          # sci for single crop irrigatted
+OPTLNDUSE3=scr          # scr for single crop rainfed, and non for no crop
+############################################################
+# Edit here (lnd,in)
+############################################################
+    WIND=../../met/dat/Wind____/GSW2B1b_${SUF}DY
+   RAINF=../../met/dat/Rainf___/GSW2B1b_${SUF}DY
+   SNOWF=../../met/dat/Snowf___/GSW2B1b_${SUF}DY
+    TAIR=../../met/dat/Tair____/GSW2B1b_${SUF}DY
+    QAIR=../../met/dat/Qair____/GSW2B1b_${SUF}DY
+      RH=NO                                     
+#    QAIR=NO
+#      RH=../../met/dat/RH______/GSW2B1b_${SUF}DY
+   PSURF=../../met/dat/PSurf___/GSW2B1b_${SUF}DY
+  SWDOWN=../../met/dat/SWdown__/GSW2B1b_${SUF}DY
+  LWDOWN=../../met/dat/LWdown__/GSW2B1b_${SUF}DY
+############################################################
+# Edit here (lnd, climate scenario in)
+############################################################
+    TCOR=../../met/dat/Tair__DF/m32ma213.oneMM
+    PCOR=../../met/dat/Prcp__RT/m32ma213.oneMM
+    LCOR=../../met/dat/LWdownDF/m32ma213.oneMM
+#
+    TCOR=NO
+    PCOR=NO
+    LCOR=NO
+############################################################
+# Edit here (lnd, climate scenario out directory
+############################################################
+DIRTAIROUT=../../lnd/out/Tairout_
+DIRRAINFOUT=../../lnd/out/Rainfout
+DIRSNOWFOUT=../../lnd/out/Snowfout
+DIRLWDOWNOUT=../../lnd/out/LWdownou
+#
+if [ ! -d $DIRTAIROUT ];   then mkdir -p $DIRTAIROUT;   fi
+if [ ! -d $DIRRAINFOUT ];  then mkdir -p $DIRRAINFOUT;  fi
+if [ ! -d $DIRSNOWFOUT ];  then mkdir -p $DIRSNOWFOUT;  fi
+if [ ! -d $DIRLWDOWNOUT ]; then mkdir -p $DIRLWDOWNOUT; fi
+############################################################
+# Edit here (lnd, climate scenario out)
+############################################################
+ TAIROUT=$DIRTAIROUT/${PRJ}${RUN}${SUF}MO
+RAINFOUT=$DIRRAINFOUT/${PRJ}${RUN}${SUF}MO
+SNOWFOUT=$DIRSNOWFOUT/${PRJ}${RUN}${SUF}MO
+LWDOWNOUT=$DIRLWDOWNOUT/${PRJ}${RUN}${SUF}MO
+#
+ TAIROUT=NO
+RAINFOUT=NO
+SNOWFOUT=NO
+LWDOWNOUT=NO
+############################################################
+# Edit here (lnd, out directory)
+############################################################
+    DIRSWNET0=../../lnd/out/SWnet___
+    DIRLWNET0=../../lnd/out/LWnet___
+      DIRQLE0=../../lnd/out/Qle_____
+       DIRQH0=../../lnd/out/Qh______
+     DIREVAP0=../../lnd/out/Evap____
+  DIRPOTEVAP0=../../lnd/out/PotEvap_
+       DIRQS0=../../lnd/out/Qs______
+      DIRQSB0=../../lnd/out/Qsb_____
+     DIRQTOT0=../../lnd/out/Qtot____
+DIRSOILMOIST0=../../lnd/out/SoilMois
+ DIRSOILTEMP0=../../lnd/out/SoilTemp
+      DIRSWE0=../../lnd/out/SWE_____
+ DIRAVGSURFT0=../../lnd/out/AvgSurfT
+
+
+    DIRSWNET1=../../lnd/out/SWnet__1
+    DIRLWNET1=../../lnd/out/LWnet__1
+      DIRQLE1=../../lnd/out/Qle____1
+       DIRQH1=../../lnd/out/Qh_____1
+     DIREVAP1=../../lnd/out/Evap___1
+  DIRPOTEVAP1=../../lnd/out/PotEvap1
+       DIRQS1=../../lnd/out/Qs_____1
+      DIRQSB1=../../lnd/out/Qsb____1
+     DIRQTOT1=../../lnd/out/Qtot___1
+DIRSOILMOIST1=../../lnd/out/SoilMoi1
+ DIRSOILTEMP1=../../lnd/out/SoilTem1
+      DIRSWE1=../../lnd/out/SWE____1
+ DIRAVGSURFT1=../../lnd/out/AvgSurf1
+
+
+    DIRSWNET2=../../lnd/out/SWnet__2
+    DIRLWNET2=../../lnd/out/LWnet__2
+      DIRQLE2=../../lnd/out/Qle____2
+       DIRQH2=../../lnd/out/Qh_____2
+     DIREVAP2=../../lnd/out/Evap___2
+  DIRPOTEVAP2=../../lnd/out/PotEvap2
+       DIRQS2=../../lnd/out/Qs_____2
+      DIRQSB2=../../lnd/out/Qsb____2
+     DIRQTOT2=../../lnd/out/Qtot___2
+DIRSOILMOIST2=../../lnd/out/SoilMoi2
+ DIRSOILTEMP2=../../lnd/out/SoilTem2
+      DIRSWE2=../../lnd/out/SWE____2
+ DIRAVGSURFT2=../../lnd/out/AvgSurf2
+
+
+    DIRSWNET3=../../lnd/out/SWnet__3
+    DIRLWNET3=../../lnd/out/LWnet__3
+      DIRQLE3=../../lnd/out/Qle____3
+       DIRQH3=../../lnd/out/Qh_____3
+     DIREVAP3=../../lnd/out/Evap___3
+  DIRPOTEVAP3=../../lnd/out/PotEvap3
+       DIRQS3=../../lnd/out/Qs_____3
+      DIRQSB3=../../lnd/out/Qsb____3
+     DIRQTOT3=../../lnd/out/Qtot___3
+DIRSOILMOIST3=../../lnd/out/SoilMoi3
+ DIRSOILTEMP3=../../lnd/out/SoilTem3
+      DIRSWE3=../../lnd/out/SWE____3
+ DIRAVGSURFT3=../../lnd/out/AvgSurf3
+#
+if [ ! -d ../../lnd/out ]; then mkdir -p ../../lnd/out; fi
+if [ ! -d $DIRSWNET0     ]; then mkdir -p $DIRSWNET0;     fi
+if [ ! -d $DIRLWNET0     ]; then mkdir -p $DIRLWNET0;     fi
+if [ ! -d $DIRQH0        ]; then mkdir -p $DIRQH0;        fi
+if [ ! -d $DIRQLE0       ]; then mkdir -p $DIRQLE0;       fi
+if [ ! -d $DIREVAP0      ]; then mkdir -p $DIREVAP0;      fi
+if [ ! -d $DIRPOTEVAP0   ]; then mkdir -p $DIRPOTEVAP0;   fi
+if [ ! -d $DIRQS0        ]; then mkdir -p $DIRQS0;        fi
+if [ ! -d $DIRQSB0       ]; then mkdir -p $DIRQSB0;       fi
+if [ ! -d $DIRQTOT0      ]; then mkdir -p $DIRQTOT0;      fi
+if [ ! -d $DIRSOILMOIST0 ]; then mkdir -p $DIRSOILMOIST0; fi
+if [ ! -d $DIRSOILTEMP0  ]; then mkdir -p $DIRSOILTEMP0;  fi
+if [ ! -d $DIRSWE0       ]; then mkdir -p $DIRSWE0;       fi
+if [ ! -d $DIRAVGSURFT0  ]; then mkdir -p $DIRAVGSURFT0;  fi
+
+
+if [ ! -d $DIRSWNET1     ]; then mkdir -p $DIRSWNET1;     fi
+if [ ! -d $DIRLWNET1     ]; then mkdir -p $DIRLWNET1;     fi
+if [ ! -d $DIRQH1        ]; then mkdir -p $DIRQH1;        fi
+if [ ! -d $DIRQLE1       ]; then mkdir -p $DIRQLE1;       fi
+if [ ! -d $DIREVAP1      ]; then mkdir -p $DIREVAP1;      fi
+if [ ! -d $DIRPOTEVAP1   ]; then mkdir -p $DIRPOTEVAP1;   fi
+if [ ! -d $DIRQS1        ]; then mkdir -p $DIRQS1;        fi
+if [ ! -d $DIRQSB1       ]; then mkdir -p $DIRQSB1;       fi
+if [ ! -d $DIRQTOT1      ]; then mkdir -p $DIRQTOT1;      fi
+if [ ! -d $DIRSOILMOIST1 ]; then mkdir -p $DIRSOILMOIST1; fi
+if [ ! -d $DIRSOILTEMP1  ]; then mkdir -p $DIRSOILTEMP1;  fi
+if [ ! -d $DIRSWE1       ]; then mkdir -p $DIRSWE1;       fi
+if [ ! -d $DIRAVGSURFT1  ]; then mkdir -p $DIRAVGSURFT1;  fi
+
+
+if [ ! -d $DIRSWNET2     ]; then mkdir -p $DIRSWNET2;     fi
+if [ ! -d $DIRLWNET2     ]; then mkdir -p $DIRLWNET2;     fi
+if [ ! -d $DIRQH2        ]; then mkdir -p $DIRQH2;        fi
+if [ ! -d $DIRQLE2       ]; then mkdir -p $DIRQLE2;       fi
+if [ ! -d $DIREVAP2      ]; then mkdir -p $DIREVAP2;      fi
+if [ ! -d $DIRPOTEVAP2   ]; then mkdir -p $DIRPOTEVAP2;   fi
+if [ ! -d $DIRQS2        ]; then mkdir -p $DIRQS2;        fi
+if [ ! -d $DIRQSB2       ]; then mkdir -p $DIRQSB2;       fi
+if [ ! -d $DIRQTOT2      ]; then mkdir -p $DIRQTOT2;      fi
+if [ ! -d $DIRSOILMOIST2 ]; then mkdir -p $DIRSOILMOIST2; fi
+if [ ! -d $DIRSOILTEMP2  ]; then mkdir -p $DIRSOILTEMP2;  fi
+if [ ! -d $DIRSWE2       ]; then mkdir -p $DIRSWE2;       fi
+if [ ! -d $DIRAVGSURFT2  ]; then mkdir -p $DIRAVGSURFT2;  fi
+
+
+if [ ! -d $DIRSWNET3     ]; then mkdir -p $DIRSWNET3;     fi
+if [ ! -d $DIRLWNET3     ]; then mkdir -p $DIRLWNET3;     fi
+if [ ! -d $DIRQH3        ]; then mkdir -p $DIRQH3;        fi
+if [ ! -d $DIRQLE3       ]; then mkdir -p $DIRQLE3;       fi
+if [ ! -d $DIREVAP3      ]; then mkdir -p $DIREVAP3;      fi
+if [ ! -d $DIRPOTEVAP3   ]; then mkdir -p $DIRPOTEVAP3;   fi
+if [ ! -d $DIRQS3        ]; then mkdir -p $DIRQS3;        fi
+if [ ! -d $DIRQSB3       ]; then mkdir -p $DIRQSB3;       fi
+if [ ! -d $DIRQTOT3      ]; then mkdir -p $DIRQTOT3;      fi
+if [ ! -d $DIRSOILMOIST3 ]; then mkdir -p $DIRSOILMOIST3; fi
+if [ ! -d $DIRSOILTEMP3  ]; then mkdir -p $DIRSOILTEMP3;  fi
+if [ ! -d $DIRSWE3       ]; then mkdir -p $DIRSWE3;       fi
+if [ ! -d $DIRAVGSURFT3  ]; then mkdir -p $DIRAVGSURFT3;  fi
+############################################################
+# Edit here (lnd, out)
+############################################################
+    SWNET0=NO
+    LWNET0=NO
+      QLE0=NO
+       QH0=NO
+       QG0=NO
+       QF0=NO
+       QV0=NO
+     EVAP0=NO
+       QS0=NO
+      QSB0=NO
+     QTOT0=NO
+      QSM0=NO
+      QST0=NO
+   ALBEDO0=NO
+  SOILWET0=NO
+  POTEVAP0=NO
+       ET0=NO
+  SUBSNOW0=NO
+  SALBEDO0=NO
+SOILMOIST0=NO   # Caution: state variables should be written out
+ SOILTEMP0=NO   # Caution: state variables should be written out
+      SWE0=NO   # Caution: state variables should be written out
+ AVGSURFT0=NO   # Caution: state variables should be written out
+
+
+    SWNET1=NO
+    LWNET1=NO
+      QLE1=NO
+       QH1=NO
+       QG1=NO
+       QF1=NO
+       QV1=NO
+     EVAP1=NO
+       QS1=NO
+      QSB1=NO
+     QTOT1=NO
+      QSM1=NO
+      QST1=NO
+   ALBEDO1=NO
+  SOILWET1=NO
+  POTEVAP1=NO
+       ET1=NO
+  SUBSNOW1=NO
+  SALBEDO1=NO
+SOILMOIST1=NO   # Caution: state variables should be written out
+ SOILTEMP1=NO   # Caution: state variables should be written out
+      SWE1=NO   # Caution: state variables should be written out
+ AVGSURFT1=NO   # Caution: state variables should be written out
+
+
+    SWNET2=NO
+    LWNET2=NO
+      QLE2=NO
+       QH2=NO
+       QG2=NO
+       QF2=NO
+       QV2=NO
+     EVAP2=NO
+       QS2=NO
+      QSB2=NO
+     QTOT2=NO
+      QSM2=NO
+      QST2=NO
+   ALBEDO2=NO
+  SOILWET2=NO
+  POTEVAP2=NO
+       ET2=NO
+  SUBSNOW2=NO
+  SALBEDO2=NO
+SOILMOIST2=NO   # Caution: state variables should be written out
+ SOILTEMP2=NO   # Caution: state variables should be written out
+      SWE2=NO   # Caution: state variables should be written out
+ AVGSURFT2=NO   # Caution: state variables should be written out
+
+
+    SWNET3=NO
+    LWNET3=NO
+      QLE3=NO
+       QH3=NO
+       QG3=NO
+       QF3=NO
+       QV3=NO
+     EVAP3=NO
+       QS3=NO
+      QSB3=NO
+     QTOT3=NO
+      QSM3=NO
+      QST3=NO
+   ALBEDO3=NO
+  SOILWET3=NO
+  POTEVAP3=NO
+       ET3=NO
+  SUBSNOW3=NO
+  SALBEDO3=NO
+SOILMOIST3=NO   # Caution: state variables should be written out
+ SOILTEMP3=NO   # Caution: state variables should be written out
+      SWE3=NO   # Caution: state variables should be written out
+ AVGSURFT3=NO   # Caution: state variables should be written out
+#
+    SWNET0=${DIRSWNET0}/${PRJ}${RUN}${SUF}MO
+    LWNET0=${DIRLWNET0}/${PRJ}${RUN}${SUF}MO
+      QLE0=${DIRQLE0}/${PRJ}${RUN}${SUF}MO
+       QH0=${DIRQH0}/${PRJ}${RUN}${SUF}MO
+     EVAP0=${DIREVAP0}/${PRJ}${RUN}${SUF}MO
+       QS0=${DIRQS0}/${PRJ}${RUN}${SUF}MO
+      QSB0=${DIRQSB0}/${PRJ}${RUN}${SUF}MO
+     QTOT0=${DIRQTOT0}/${PRJ}${RUN}${SUF}MO
+  POTEVAP0=${DIRPOTEVAP0}/${PRJ}${RUN}${SUF}MO
+SOILMOIST0=${DIRSOILMOIST0}/${PRJ}${RUN}${SUF}MO
+ SOILTEMP0=${DIRSOILTEMP0}/${PRJ}${RUN}${SUF}MO
+      SWE0=${DIRSWE0}/${PRJ}${RUN}${SUF}MO
+ AVGSURFT0=${DIRAVGSURFT0}/${PRJ}${RUN}${SUF}MO
+#
+#    SWNET1=${DIRSWNET1}/${PRJ}${RUN}${SUF}DY
+#    LWNET1=${DIRLWNET1}/${PRJ}${RUN}${SUF}DY
+#      QLE1=${DIRQLE1}/${PRJ}${RUN}${SUF}DY
+#       QH1=${DIRQH1}/${PRJ}${RUN}${SUF}DY
+#     EVAP1=${DIREVAP1}/${PRJ}${RUN}${SUF}DY
+#       QS1=${DIRQS1}/${PRJ}${RUN}${SUF}DY
+#      QSB1=${DIRQSB1}/${PRJ}${RUN}${SUF}DY
+#     QTOT1=${DIRQTOT1}/${PRJ}${RUN}${SUF}DY
+#  POTEVAP1=${DIRPOTEVAP1}/${PRJ}${RUN}${SUF}DY
+#SOILMOIST1=${DIRSOILMOIST1}/${PRJ}${RUN}${SUF}DY
+# SOILTEMP1=${DIRSOILTEMP1}/${PRJ}${RUN}${SUF}DY
+#      SWE1=${DIRSWE1}/${PRJ}${RUN}${SUF}DY
+# AVGSURFT1=${DIRAVGSURFT1}/${PRJ}${RUN}${SUF}DY
+#
+#    SWNET2=${DIRSWNET2}/${PRJ}${RUN}${SUF}DY
+#    LWNET2=${DIRLWNET2}/${PRJ}${RUN}${SUF}DY
+#      QLE2=${DIRQLE2}/${PRJ}${RUN}${SUF}DY
+#       QH2=${DIRQH2}/${PRJ}${RUN}${SUF}DY
+#     EVAP2=${DIREVAP2}/${PRJ}${RUN}${SUF}DY
+#       QS2=${DIRQS2}/${PRJ}${RUN}${SUF}DY
+#      QSB2=${DIRQSB2}/${PRJ}${RUN}${SUF}DY
+#     QTOT2=${DIRQTOT2}/${PRJ}${RUN}${SUF}DY
+#  POTEVAP2=${DIRPOTEVAP2}/${PRJ}${RUN}${SUF}DY
+#SOILMOIST2=${DIRSOILMOIST2}/${PRJ}${RUN}${SUF}DY
+# SOILTEMP2=${DIRSOILTEMP2}/${PRJ}${RUN}${SUF}DY
+#      SWE2=${DIRSWE2}/${PRJ}${RUN}${SUF}DY
+# AVGSURFT2=${DIRAVGSURFT2}/${PRJ}${RUN}${SUF}DY
+#
+#    SWNET3=${DIRSWNET3}/${PRJ}${RUN}${SUF}DY
+#    LWNET3=${DIRLWNET3}/${PRJ}${RUN}${SUF}DY
+#      QLE3=${DIRQLE3}/${PRJ}${RUN}${SUF}DY
+#       QH3=${DIRQH3}/${PRJ}${RUN}${SUF}DY
+#     EVAP3=${DIREVAP3}/${PRJ}${RUN}${SUF}DY
+#       QS3=${DIRQS3}/${PRJ}${RUN}${SUF}DY
+#      QSB3=${DIRQSB3}/${PRJ}${RUN}${SUF}DY
+#     QTOT3=${DIRQTOT3}/${PRJ}${RUN}${SUF}DY
+#  POTEVAP3=${DIRPOTEVAP3}/${PRJ}${RUN}${SUF}DY
+#SOILMOIST3=${DIRSOILMOIST3}/${PRJ}${RUN}${SUF}DY
+# SOILTEMP3=${DIRSOILTEMP3}/${PRJ}${RUN}${SUF}DY
+#      SWE3=${DIRSWE3}/${PRJ}${RUN}${SUF}DY
+# AVGSURFT3=${DIRAVGSURFT3}/${PRJ}${RUN}${SUF}DY
+############################################################
+# Edit here (riv, out directory)
+############################################################
+DIRRIVSTO=../../riv/out/riv_sto_
+DIRRIVOUT=../../riv/out/riv_out_
+#
+if [ ! -d ../../riv/out ]; then mkdir -p ../../riv/out; fi
+if [ ! -d $DIRRIVSTO    ]; then mkdir -p $DIRRIVSTO;    fi
+if [ ! -d $DIRRIVOUT    ]; then mkdir -p $DIRRIVOUT;    fi
+############################################################
+# Edit here (riv, out)
+############################################################
+RIVSTO=${DIRRIVSTO}/${PRJ}${RUN}${SUF}MO # River storage
+   DIS=${DIRRIVOUT}/${PRJ}${RUN}${SUF}MO # River discharge
+############################################################
+# Edit here (crp, out directory)
+############################################################
+   DIRYLDOUT1ST0=../../crp/out/yld_1st0
+   DIRCWDOUT1ST0=../../crp/out/cwd_1st0
+   DIRCWSOUT1ST0=../../crp/out/cws_1st0
+ DIRREGFDOUT1ST0=../../crp/out/reg_1st0
+DIRHVSDOYOUT1ST0=../../crp/out/hvs_1st0
+DIRCRPDAYOUT1ST0=../../crp/out/crp_1st0
+   DIRYLDOUT2ND0=../../crp/out/yld_2nd0
+   DIRCWDOUT2ND0=../../crp/out/cwd_2nd0
+   DIRCWSOUT2ND0=../../crp/out/cws_2nd0
+ DIRREGFDOUT2ND0=../../crp/out/reg_2nd0
+DIRHVSDOYOUT2ND0=../../crp/out/hvs_2nd0
+DIRCRPDAYOUT2ND0=../../crp/out/crp_2nd0
+   DIRYLDOUT1ST1=../../crp/out/yld_1st1
+   DIRCWDOUT1ST1=../../crp/out/cwd_1st1
+   DIRCWSOUT1ST1=../../crp/out/cws_1st1
+ DIRREGFDOUT1ST1=../../crp/out/reg_1st1
+DIRHVSDOYOUT1ST1=../../crp/out/hvs_1st1
+DIRCRPDAYOUT1ST1=../../crp/out/crp_1st1
+   DIRYLDOUT2ND1=../../crp/out/yld_2nd1
+   DIRCWDOUT2ND1=../../crp/out/cwd_2nd1
+   DIRCWSOUT2ND1=../../crp/out/cws_2nd1
+ DIRREGFDOUT2ND1=../../crp/out/reg_2nd1
+DIRHVSDOYOUT2ND1=../../crp/out/hvs_2nd1
+DIRCRPDAYOUT2ND1=../../crp/out/crp_2nd1
+   DIRYLDOUT1ST2=../../crp/out/yld_1st2
+   DIRCWDOUT1ST2=../../crp/out/cwd_1st2
+   DIRCWSOUT1ST2=../../crp/out/cws_1st2
+ DIRREGFDOUT1ST2=../../crp/out/reg_1st2
+DIRHVSDOYOUT1ST2=../../crp/out/hvs_1st2
+DIRCRPDAYOUT1ST2=../../crp/out/crp_1st2
+   DIRYLDOUT2ND2=../../crp/out/yld_2nd2
+   DIRCWDOUT2ND2=../../crp/out/cwd_2nd2
+   DIRCWSOUT2ND2=../../crp/out/cws_2nd2
+ DIRREGFDOUT2ND2=../../crp/out/reg_2nd2
+DIRHVSDOYOUT2ND2=../../crp/out/hvs_2nd2
+DIRCRPDAYOUT2ND2=../../crp/out/crp_2nd2
+   DIRYLDOUT1ST3=../../crp/out/yld_1st3
+   DIRCWDOUT1ST3=../../crp/out/cwd_1st3
+   DIRCWSOUT1ST3=../../crp/out/cws_1st3
+ DIRREGFDOUT1ST3=../../crp/out/reg_1st3
+DIRHVSDOYOUT1ST3=../../crp/out/hvs_1st3
+DIRCRPDAYOUT1ST3=../../crp/out/crp_1st3
+   DIRYLDOUT2ND3=../../crp/out/yld_2nd3
+   DIRCWDOUT2ND3=../../crp/out/cwd_2nd3
+   DIRCWSOUT2ND3=../../crp/out/cws_2nd3
+ DIRREGFDOUT2ND3=../../crp/out/reg_2nd3
+DIRHVSDOYOUT2ND3=../../crp/out/hvs_2nd3
+DIRCRPDAYOUT2ND3=../../crp/out/crp_2nd3
+#
+if [ ! -d $DIRYLDOUT1ST0    ]; then mkdir -p $DIRYLDOUT1ST0;    fi
+if [ ! -d $DIRCWDOUT1ST0    ]; then mkdir -p $DIRCWDOUT1ST0;    fi
+if [ ! -d $DIRCWSOUT1ST0    ]; then mkdir -p $DIRCWSOUT1ST0;    fi
+if [ ! -d $DIRREGFDOUT1ST0  ]; then mkdir -p $DIRREGFDOUT1ST0;  fi
+if [ ! -d $DIRHVSDOYOUT1ST0 ]; then mkdir -p $DIRHVSDOYOUT1ST0; fi
+if [ ! -d $DIRCRPDAYOUT1ST0 ]; then mkdir -p $DIRCRPDAYOUT1ST0; fi
+if [ ! -d $DIRYLDOUT2ND0    ]; then mkdir -p $DIRYLDOUT2ND0;    fi
+if [ ! -d $DIRCWDOUT2ND0    ]; then mkdir -p $DIRCWDOUT2ND0;    fi
+if [ ! -d $DIRCWSOUT2ND0    ]; then mkdir -p $DIRCWSOUT2ND0;    fi
+if [ ! -d $DIRREGFDOUT2ND0  ]; then mkdir -p $DIRREGFDOUT2ND0;  fi
+if [ ! -d $DIRHVSDOYOUT2ND0 ]; then mkdir -p $DIRHVSDOYOUT2ND0; fi
+if [ ! -d $DIRCRPDAYOUT2ND0 ]; then mkdir -p $DIRCRPDAYOUT2ND0; fi
+if [ ! -d $DIRYLDOUT1ST1    ]; then mkdir -p $DIRYLDOUT1ST1;    fi
+if [ ! -d $DIRCWDOUT1ST1    ]; then mkdir -p $DIRCWDOUT1ST1;    fi
+if [ ! -d $DIRCWSOUT1ST1    ]; then mkdir -p $DIRCWSOUT1ST1;    fi
+if [ ! -d $DIRREGFDOUT1ST1  ]; then mkdir -p $DIRREGFDOUT1ST1;  fi
+if [ ! -d $DIRHVSDOYOUT1ST1 ]; then mkdir -p $DIRHVSDOYOUT1ST1; fi
+if [ ! -d $DIRCRPDAYOUT1ST1 ]; then mkdir -p $DIRCRPDAYOUT1ST1; fi
+if [ ! -d $DIRYLDOUT2ND1    ]; then mkdir -p $DIRYLDOUT2ND1;    fi
+if [ ! -d $DIRCWDOUT2ND1    ]; then mkdir -p $DIRCWDOUT2ND1;    fi
+if [ ! -d $DIRCWSOUT2ND1    ]; then mkdir -p $DIRCWSOUT2ND1;    fi
+if [ ! -d $DIRREGFDOUT2ND1  ]; then mkdir -p $DIRREGFDOUT2ND1;  fi
+if [ ! -d $DIRHVSDOYOUT2ND1 ]; then mkdir -p $DIRHVSDOYOUT2ND1; fi
+if [ ! -d $DIRCRPDAYOUT2ND1 ]; then mkdir -p $DIRCRPDAYOUT2ND1; fi
+if [ ! -d $DIRYLDOUT1ST2    ]; then mkdir -p $DIRYLDOUT1ST2;    fi
+if [ ! -d $DIRCWDOUT1ST2    ]; then mkdir -p $DIRCWDOUT1ST2;    fi
+if [ ! -d $DIRCWSOUT1ST2    ]; then mkdir -p $DIRCWSOUT1ST2;    fi
+if [ ! -d $DIRREGFDOUT1ST2  ]; then mkdir -p $DIRREGFDOUT1ST2;  fi
+if [ ! -d $DIRHVSDOYOUT1ST2 ]; then mkdir -p $DIRHVSDOYOUT1ST2; fi
+if [ ! -d $DIRCRPDAYOUT1ST2 ]; then mkdir -p $DIRCRPDAYOUT1ST2; fi
+if [ ! -d $DIRYLDOUT2ND2    ]; then mkdir -p $DIRYLDOUT2ND2;    fi
+if [ ! -d $DIRCWDOUT2ND2    ]; then mkdir -p $DIRCWDOUT2ND2;    fi
+if [ ! -d $DIRCWSOUT2ND2    ]; then mkdir -p $DIRCWSOUT2ND2;    fi
+if [ ! -d $DIRREGFDOUT2ND2  ]; then mkdir -p $DIRREGFDOUT2ND2;  fi
+if [ ! -d $DIRHVSDOYOUT2ND2 ]; then mkdir -p $DIRHVSDOYOUT2ND2; fi
+if [ ! -d $DIRCRPDAYOUT2ND2 ]; then mkdir -p $DIRCRPDAYOUT2ND2; fi
+if [ ! -d $DIRYLDOUT1ST3    ]; then mkdir -p $DIRYLDOUT1ST3;    fi
+if [ ! -d $DIRCWDOUT1ST3    ]; then mkdir -p $DIRCWDOUT1ST3;    fi
+if [ ! -d $DIRCWSOUT1ST3    ]; then mkdir -p $DIRCWSOUT1ST3;    fi
+if [ ! -d $DIRREGFDOUT1ST3  ]; then mkdir -p $DIRREGFDOUT1ST3;  fi
+if [ ! -d $DIRHVSDOYOUT1ST3 ]; then mkdir -p $DIRHVSDOYOUT1ST3; fi
+if [ ! -d $DIRCRPDAYOUT1ST3 ]; then mkdir -p $DIRCRPDAYOUT1ST3; fi
+if [ ! -d $DIRYLDOUT2ND3    ]; then mkdir -p $DIRYLDOUT2ND3;    fi
+if [ ! -d $DIRCWDOUT2ND3    ]; then mkdir -p $DIRCWDOUT2ND3;    fi
+if [ ! -d $DIRCWSOUT2ND3    ]; then mkdir -p $DIRCWSOUT2ND3;    fi
+if [ ! -d $DIRREGFDOUT2ND3  ]; then mkdir -p $DIRREGFDOUT2ND3;  fi
+if [ ! -d $DIRHVSDOYOUT2ND3 ]; then mkdir -p $DIRHVSDOYOUT2ND3; fi
+if [ ! -d $DIRCRPDAYOUT2ND3 ]; then mkdir -p $DIRCRPDAYOUT2ND3; fi
+############################################################
+# Edit here (crp, out)
+############################################################
+   YLDOUT1ST0=${DIRYLDOUT1ST0}/${PRJ}${RUN}${SUF}YR
+   YLDOUT2ND0=${DIRYLDOUT2ND0}/${PRJ}${RUN}${SUF}YR
+   CWDOUT1ST0=${DIRCWDOUT1ST0}/${PRJ}${RUN}${SUF}YR
+   CWDOUT2ND0=${DIRCWDOUT2ND0}/${PRJ}${RUN}${SUF}YR
+   CWSOUT1ST0=${DIRCWSOUT1ST0}/${PRJ}${RUN}${SUF}YR
+   CWSOUT2ND0=${DIRCWSOUT2ND0}/${PRJ}${RUN}${SUF}YR
+HVSDOYOUT1ST0=${DIRHVSDOYOUT1ST0}/${PRJ}${RUN}${SUF}YR
+HVSDOYOUT2ND0=${DIRHVSDOYOUT2ND0}/${PRJ}${RUN}${SUF}YR
+CRPDAYOUT1ST0=${DIRCRPDAYOUT1ST0}/${PRJ}${RUN}${SUF}YR
+CRPDAYOUT2ND0=${DIRCRPDAYOUT2ND0}/${PRJ}${RUN}${SUF}YR
+ REGFDOUT1ST0=${DIRREGFDOUT1ST0}/${PRJ}${RUN}${SUF}YR
+ REGFDOUT2ND0=${DIRREGFDOUT2ND0}/${PRJ}${RUN}${SUF}YR
+
+
+   YLDOUT1ST1=${DIRYLDOUT1ST1}/${PRJ}${RUN}${SUF}YR
+   YLDOUT2ND1=${DIRYLDOUT2ND1}/${PRJ}${RUN}${SUF}YR
+   CWDOUT1ST1=${DIRCWDOUT1ST1}/${PRJ}${RUN}${SUF}YR
+   CWDOUT2ND1=${DIRCWDOUT2ND1}/${PRJ}${RUN}${SUF}YR
+   CWSOUT1ST1=${DIRCWSOUT1ST1}/${PRJ}${RUN}${SUF}YR
+   CWSOUT2ND1=${DIRCWSOUT2ND1}/${PRJ}${RUN}${SUF}YR
+HVSDOYOUT1ST1=${DIRHVSDOYOUT1ST1}/${PRJ}${RUN}${SUF}YR
+HVSDOYOUT2ND1=${DIRHVSDOYOUT2ND1}/${PRJ}${RUN}${SUF}YR
+CRPDAYOUT1ST1=${DIRCRPDAYOUT1ST1}/${PRJ}${RUN}${SUF}YR
+CRPDAYOUT2ND1=${DIRCRPDAYOUT2ND1}/${PRJ}${RUN}${SUF}YR
+ REGFDOUT1ST1=${DIRREGFDOUT1ST1}/${PRJ}${RUN}${SUF}YR
+ REGFDOUT2ND1=${DIRREGFDOUT2ND1}/${PRJ}${RUN}${SUF}YR
+
+
+   YLDOUT1ST2=${DIRYLDOUT1ST2}/${PRJ}${RUN}${SUF}YR
+   YLDOUT2ND2=${DIRYLDOUT2ND2}/${PRJ}${RUN}${SUF}YR
+   CWDOUT1ST2=${DIRCWDOUT1ST2}/${PRJ}${RUN}${SUF}YR
+   CWDOUT2ND2=${DIRCWDOUT2ND2}/${PRJ}${RUN}${SUF}YR
+   CWSOUT1ST2=${DIRCWSOUT1ST2}/${PRJ}${RUN}${SUF}YR
+   CWSOUT2ND2=${DIRCWSOUT2ND2}/${PRJ}${RUN}${SUF}YR
+HVSDOYOUT1ST2=${DIRHVSDOYOUT1ST2}/${PRJ}${RUN}${SUF}YR
+HVSDOYOUT2ND2=${DIRHVSDOYOUT2ND2}/${PRJ}${RUN}${SUF}YR
+CRPDAYOUT1ST2=${DIRCRPDAYOUT1ST2}/${PRJ}${RUN}${SUF}YR
+CRPDAYOUT2ND2=${DIRCRPDAYOUT2ND2}/${PRJ}${RUN}${SUF}YR
+ REGFDOUT1ST2=${DIRREGFDOUT1ST2}/${PRJ}${RUN}${SUF}YR
+ REGFDOUT2ND2=${DIRREGFDOUT2ND2}/${PRJ}${RUN}${SUF}YR
+
+
+   YLDOUT1ST3=${DIRYLDOUT1ST3}/${PRJ}${RUN}${SUF}YR
+   YLDOUT2ND3=${DIRYLDOUT2ND3}/${PRJ}${RUN}${SUF}YR
+   CWDOUT1ST3=${DIRCWDOUT1ST3}/${PRJ}${RUN}${SUF}YR
+   CWDOUT2ND3=${DIRCWDOUT2ND3}/${PRJ}${RUN}${SUF}YR
+   CWSOUT1ST3=${DIRCWSOUT1ST3}/${PRJ}${RUN}${SUF}YR
+   CWSOUT2ND3=${DIRCWSOUT2ND3}/${PRJ}${RUN}${SUF}YR
+HVSDOYOUT1ST3=${DIRHVSDOYOUT1ST3}/${PRJ}${RUN}${SUF}YR
+HVSDOYOUT2ND3=${DIRHVSDOYOUT2ND3}/${PRJ}${RUN}${SUF}YR
+CRPDAYOUT1ST3=${DIRCRPDAYOUT1ST3}/${PRJ}${RUN}${SUF}YR
+CRPDAYOUT2ND3=${DIRCRPDAYOUT2ND3}/${PRJ}${RUN}${SUF}YR
+ REGFDOUT1ST3=${DIRREGFDOUT1ST3}/${PRJ}${RUN}${SUF}YR
+ REGFDOUT2ND3=${DIRREGFDOUT2ND3}/${PRJ}${RUN}${SUF}YR
+############################################################
+# Edit here (hum, out directory)
+############################################################
+DIRDEMAGR0=../../lnd/out/DemAgr__
+DIRDEMAGR1=../../lnd/out/DemAgr_1
+DIRDEMAGR2=../../lnd/out/DemAgr_2
+DIRDEMAGR3=../../lnd/out/DemAgr_3
+#
+DIRSUPAGR=../../lnd/out/SupAgr__
+DIRDAMSTO=../../dam/out/dam_sto_       # large reservoir storage
+DIRPNDSTO=../../dam/out/pnd_sto_       # medium-sized reservoir storage
+DIRDAMOUT=../../dam/out/dam_out_       # large reservoir release
+DIRDAMDEM=../../dam/out/dam_dem_       # large reservoir release
+DIRPNDOUT=../../dam/out/pnd_out_       # medium-sezed reservoir storage
+DIRSUPIND=../../lnd/out/SupInd__       # industrial water supply
+DIRSUPDOM=../../lnd/out/SupDom__       # domestic water supply
+DIRSUPAGRRIV=../../lnd/out/SupAgrR_    # agricultral water supply from river
+DIRSUPINDRIV=../../lnd/out/SupIndR_    # industrial water supply from river
+DIRSUPDOMRIV=../../lnd/out/SupDomR_    # domestic water supply from river
+DIRSUPAGRPND=../../lnd/out/SupAgrP_    # agricultural water supply from m-s r
+DIRSUPINDPND=../../lnd/out/SupIndP_    # industrial water supply from m-s r
+DIRSUPDOMPND=../../lnd/out/SupDomP_    # domestic water supply from m-s r
+DIRSUPAGRNNB=../../lnd/out/SupAgrN_    # agricultural water supply from NNBW
+DIRSUPINDNNB=../../lnd/out/SupIndN_    # industrial water supply from NNBW
+DIRSUPDOMNNB=../../lnd/out/SupDomN_    # domestic water supply from NNBW
+#
+if [ ! -d $DIRDEMAGR0    ]; then mkdir -p $DIRDEMAGR0;     fi
+if [ ! -d $DIRDEMAGR1    ]; then mkdir -p $DIRDEMAGR1;     fi
+if [ ! -d $DIRDEMAGR2    ]; then mkdir -p $DIRDEMAGR2;     fi
+if [ ! -d $DIRDEMAGR3    ]; then mkdir -p $DIRDEMAGR3;     fi
+if [ ! -d $DIRSUPAGR     ]; then mkdir -p $DIRSUPAGR;      fi
+if [ ! -d $DIRDAMSTO     ]; then mkdir -p $DIRDAMSTO;        fi
+if [ ! -d $DIRDAMOUT     ]; then mkdir -p $DIRDAMOUT;        fi
+if [ ! -d $DIRDAMDEM     ]; then mkdir -p $DIRDAMDEM;        fi
+if [ ! -d $DIRPNDSTO     ]; then mkdir -p $DIRPNDSTO;        fi
+if [ ! -d $DIRPNDOUT     ]; then mkdir -p $DIRPNDOUT;        fi
+if [ ! -d $DIRSUPIND     ]; then mkdir -p $DIRSUPIND;        fi
+if [ ! -d $DIRSUPDOM     ]; then mkdir -p $DIRSUPDOM;        fi
+if [ ! -d $DIRSUPAGRRIV  ]; then mkdir -p $DIRSUPAGRRIV;     fi
+if [ ! -d $DIRSUPINDRIV  ]; then mkdir -p $DIRSUPINDRIV;     fi
+if [ ! -d $DIRSUPDOMRIV  ]; then mkdir -p $DIRSUPDOMRIV;     fi
+if [ ! -d $DIRSUPAGRPND  ]; then mkdir -p $DIRSUPAGRPND;     fi
+if [ ! -d $DIRSUPINDPND  ]; then mkdir -p $DIRSUPINDPND;     fi
+if [ ! -d $DIRSUPDOMPND  ]; then mkdir -p $DIRSUPDOMPND;     fi
+if [ ! -d $DIRSUPAGRNNB  ]; then mkdir -p $DIRSUPAGRNNB;     fi
+if [ ! -d $DIRSUPINDNNB  ]; then mkdir -p $DIRSUPINDNNB;     fi
+if [ ! -d $DIRSUPDOMNNB  ]; then mkdir -p $DIRSUPDOMNNB;     fi
+############################################################
+# Edit here (hum, out)
+############################################################
+    DEMAGR0=NO
+    DEMAGR1=NO
+    DEMAGR2=NO
+    DEMAGR3=NO
+    SUPAGR=NO
+    DAMSTO=NO
+    PNDSTO=NO
+    DAMINF=NO
+    DAMOUT=NO
+    DAMDEM=NO
+    PNDINF=NO
+    PNDOUT=NO
+    SUPIND=NO
+    SUPDOM=NO
+    SUPAGRRIV=NO
+    SUPINDRIV=NO
+    SUPDOMRIV=NO
+    SUPAGRPND=NO
+    SUPINDPND=NO
+    SUPDOMPND=NO
+    SUPAGRNNB=NO
+    SUPINDNNB=NO
+    SUPDOMNNB=NO
+#
+    DEMAGR0=${DIRDEMAGR0}/${PRJ}${RUN}${SUF}MO
+    DEMAGR1=${DIRDEMAGR1}/${PRJ}${RUN}${SUF}MO
+    DEMAGR2=${DIRDEMAGR2}/${PRJ}${RUN}${SUF}MO
+    DEMAGR3=${DIRDEMAGR3}/${PRJ}${RUN}${SUF}MO
+    SUPAGR=${DIRSUPAGR}/${PRJ}${RUN}${SUF}MO
+    DAMSTO=${DIRDAMSTO}/${PRJ}${RUN}${SUF}MO
+    DAMOUT=${DIRDAMOUT}/${PRJ}${RUN}${SUF}MO
+    DAMDEM=${DIRDAMDEM}/${PRJ}${RUN}${SUF}MO
+#    PNDSTO=${DIRPNDSTO}/${PRJ}${RUN}${SUF}MO
+#    PNDOUT=${DIRPNDOUT}/${PRJ}${RUN}${SUF}MO
+    SUPIND=${DIRSUPIND}/${PRJ}${RUN}${SUF}MO
+    SUPDOM=${DIRSUPDOM}/${PRJ}${RUN}${SUF}MO
+    SUPAGRRIV=${DIRSUPAGRRIV}/${PRJ}${RUN}${SUF}MO
+    SUPINDRIV=${DIRSUPINDRIV}/${PRJ}${RUN}${SUF}MO
+    SUPDOMRIV=${DIRSUPDOMRIV}/${PRJ}${RUN}${SUF}MO
+#    SUPAGRPND=${DIRSUPAGRPND}/${PRJ}${RUN}${SUF}MO
+#    SUPINDPND=${DIRSUPINDPND}/${PRJ}${RUN}${SUF}MO
+#    SUPDOMPND=${DIRSUPDOMPND}/${PRJ}${RUN}${SUF}MO
+    SUPAGRNNB=${DIRSUPAGRNNB}/${PRJ}${RUN}${SUF}MO
+    SUPINDNNB=${DIRSUPINDNNB}/${PRJ}${RUN}${SUF}MO
+    SUPDOMNNB=${DIRSUPDOMNNB}/${PRJ}${RUN}${SUF}MO
+############################################################
+# Edit here (lnd, initial value)
+############################################################
+SOILMOISTINI0=../../lnd/ini/temp.150.0${SUF}
+ SOILTEMPINI0=../../lnd/ini/temp.283.15${SUF}
+      SWEINI0=../../lnd/ini/temp.0.0${SUF}
+ AVGSURFTINI0=../../lnd/ini/temp.283.15${SUF}
+#
+SOILMOISTINI1=../../lnd/ini/temp.150.0${SUF}
+ SOILTEMPINI1=../../lnd/ini/temp.283.15${SUF}
+      SWEINI1=../../lnd/ini/temp.0.0${SUF}
+ AVGSURFTINI1=../../lnd/ini/temp.283.15${SUF}
+#
+SOILMOISTINI2=../../lnd/ini/temp.150.0${SUF}
+ SOILTEMPINI2=../../lnd/ini/temp.283.15${SUF}
+      SWEINI2=../../lnd/ini/temp.0.0${SUF}
+ AVGSURFTINI2=../../lnd/ini/temp.283.15${SUF}
+#
+SOILMOISTINI3=../../lnd/ini/temp.150.0${SUF}
+ SOILTEMPINI3=../../lnd/ini/temp.283.15${SUF}
+      SWEINI3=../../lnd/ini/temp.0.0${SUF}
+ AVGSURFTINI3=../../lnd/ini/temp.283.15${SUF}
+############################################################
+# Edit here (riv, initial value)
+############################################################
+RIVSTOINI=../../riv/ini/temp.0.0${SUF}  # Initial river storage
+############################################################
+# Edit here (crp, initial value)
+############################################################
+  BTINI0=../../dam/ini/temp.0.0${SUF}
+ RSDINI0=../../dam/ini/temp.0.0${SUF}
+OUTBINI0=../../dam/ini/temp.0.0${SUF}
+  BTINI1=../../dam/ini/temp.0.0${SUF}
+ RSDINI1=../../dam/ini/temp.0.0${SUF}
+OUTBINI1=../../dam/ini/temp.0.0${SUF}
+  BTINI2=../../dam/ini/temp.0.0${SUF}
+ RSDINI2=../../dam/ini/temp.0.0${SUF}
+OUTBINI2=../../dam/ini/temp.0.0${SUF}
+  BTINI3=../../dam/ini/temp.0.0${SUF}
+ RSDINI3=../../dam/ini/temp.0.0${SUF}
+OUTBINI3=../../dam/ini/temp.0.0${SUF}
+
+
+ HUNAINI0=../../crp/ini/temp.0.0${SUF}
+  SWUINI0=../../crp/ini/temp.0.0${SUF}
+  SWPINI0=../../crp/ini/temp.0.0${SUF}
+REGFWINI0=../../crp/ini/temp.0.0${SUF}
+REGFLINI0=../../crp/ini/temp.0.0${SUF}
+REGFHINI0=../../crp/ini/temp.0.0${SUF}
+REGFNINI0=../../crp/ini/temp.0.0${SUF}
+REGFPINI0=../../crp/ini/temp.0.0${SUF}
+
+
+ HUNAINI1=../../crp/ini/temp.0.0${SUF}
+  SWUINI1=../../crp/ini/temp.0.0${SUF}
+  SWPINI1=../../crp/ini/temp.0.0${SUF}
+REGFWINI1=../../crp/ini/temp.0.0${SUF}
+REGFLINI1=../../crp/ini/temp.0.0${SUF}
+REGFHINI1=../../crp/ini/temp.0.0${SUF}
+REGFNINI1=../../crp/ini/temp.0.0${SUF}
+REGFPINI1=../../crp/ini/temp.0.0${SUF}
+
+
+ HUNAINI2=../../crp/ini/temp.0.0${SUF}
+  SWUINI2=../../crp/ini/temp.0.0${SUF}
+  SWPINI2=../../crp/ini/temp.0.0${SUF}
+REGFWINI2=../../crp/ini/temp.0.0${SUF}
+REGFLINI2=../../crp/ini/temp.0.0${SUF}
+REGFHINI2=../../crp/ini/temp.0.0${SUF}
+REGFNINI2=../../crp/ini/temp.0.0${SUF}
+REGFPINI2=../../crp/ini/temp.0.0${SUF}
+
+
+ HUNAINI3=../../crp/ini/temp.0.0${SUF}
+  SWUINI3=../../crp/ini/temp.0.0${SUF}
+  SWPINI3=../../crp/ini/temp.0.0${SUF}
+REGFWINI3=../../crp/ini/temp.0.0${SUF}
+REGFLINI3=../../crp/ini/temp.0.0${SUF}
+REGFHINI3=../../crp/ini/temp.0.0${SUF}
+REGFNINI3=../../crp/ini/temp.0.0${SUF}
+REGFPINI3=../../crp/ini/temp.0.0${SUF}
+############################################################
+# Edit here (hum, initial value)
+############################################################
+DAMSTOINI=../../dam/ini/temp.0.0${SUF}  # Initial large reservoir storage
+PNDSTOINI=../../dam/ini/temp.0.0${SUF}  # Initial medium reservoir storage
+############################################################
+# Edit here (lnd, map)
+############################################################
+LNDMSK=../../map/dat/lnd_msk_/lndmsk${MAP}${SUF}
+############################################################
+# Edit here (riv, map)
+############################################################
+RIVSEQ=../../map/out/riv_seq_/rivseq${MAP}${SUF}   # River sequence
+RIVNXL=../../map/out/riv_nxl_/rivnxl${MAP}${SUF}   # Next grid
+RIVNXD=../../map/out/riv_nxd_/rivnxd${MAP}${SUF}   # Distance to next grid
+LNDARA=../../map/dat/lnd_ara_/lndara${MAP}${SUF}   # Land area
+############################################################
+# Edit here (crp, map)
+############################################################
+PLTDOY1=../../crp/out/plt_crp1/GSW2__C_00000000${SUF}
+PLTDOY2=../../crp/out/plt_crp2/GSW2__C_00000000${SUF}
+HVSDOY1=../../crp/out/hvs_crp1/GSW2__C_00000000${SUF}
+HVSDOY2=../../crp/out/hvs_crp2/GSW2__C_00000000${SUF}
+CRPTYP1=../../map/out/crp_typ1/L04_____00000000${SUF}
+CRPTYP2=../../map/out/crp_typ2/L04_____00000000${SUF}
+############################################################
+# Edit here (hum, map, industrial/domestic water)
+############################################################
+DEMIND=NO                    # Ind wat dem
+DEMDOM=NO                    # Dom wat dem
+#
+DEMIND=../../map/dat/dem_ind_/WRI_____19950000.GSWP2${SUF} # Ind wat dem
+DEMDOM=../../map/dat/dem_dom_/WRI_____19950000.GSWP2${SUF} # Dom wat dem
+############################################################
+# Edit here (hum, map, environmental flow)
+############################################################
+ENVFLW=NO                    # Environmental flow
+#
+ENVFLW=../../riv/out/env_out_/GSW2LR__${SUF}MO
+############################################################
+# Edit here (hum, map, reservoir operation)
+############################################################
+DAMID_=NO                    # Large reservoir ID
+DAMPRP=NO                    # Large reservoir primary purpose
+DAMMON1ST=NO                 # 1st month of operating year
+DAMCAP=NO                    # Large reservoir capacity
+DAMSRF=NO                    # Reservoir surface area
+DAMALC=NO                    # Reservoir demand allocation (kalc)
+DAMRIVOUTFIX=NO              # Mean ann riv dis
+DAMDEMAGRFIX=NO              # Mean ann agr wat dem
+#
+DAMID_=../../map/dat/dam_id__/H06_____${SUF}
+DAMPRP=../../map/dat/dam_prp_/H06_____${SUF}
+DAMMON1ST=../../riv/out/fld2dro_/GSW2LR__00000000${SUF}
+DAMCAP=../../map/dat/dam_cap_/H06_____${SUF}
+DAMSRF=NO
+DAMALC=../../map/out/dam_alc_/H06_____${SUF}ID
+DAMRIVOUTFIX=../../riv/out/riv_out_/GSW2LR__00000000${SUF}
+DAMDEMAGRFIX=../../lnd/out/DemAgr__/GSW2L_C_00000000${SUF}FX
+##DAMDEMAGRFIX=NO
+############################################################
+# Edit here (hum, map, medium size reservoir)
+############################################################
+PNDCAP=NO                    # Medium size reservoir capacity
+############################################################
+# Edit here (lnd, parameter)
+############################################################
+SOILDEPTH=../../lnd/dat/temp.1.00${SUF}
+ FIELDCAP=../../lnd/dat/temp.0.30${SUF}
+     WILT=../../lnd/dat/temp.0.15${SUF}
+       CG=../../lnd/dat/temp.13000.00${SUF}
+    GAMMA=../../lnd/dat/temp.2.00${SUF}
+      TAU=../../lnd/dat/temp.100.00${SUF}
+  BALBEDO=../../met/dat/Albedo__/GSW2____${SUF}MO
+############################################################
+# Edit here (riv, parameter)
+############################################################
+FLWVEL=../../riv/dat/temp.0.5${SUF}       # Flow velocity
+MEDRAT=../../riv/dat/temp.1.4${SUF}       # Meandering ratio
+############################################################
+# Edit here (crp, parameter)
+############################################################
+RAM2SWIM=../../crp/org/SWIM/ram2swim.txt
+SWIM2RAM=../../crp/org/SWIM/swim2ram.txt
+  CRPPAR=../../crp/org/SWIM/crppar.txt
+INTCRPDAYMAX=300
+REGFMIN=0.7
+TDORM=5.0
+TFRZ=-10.0
+HUNMAX=12.5
+IHUNMAT=0.95
+TSAW=10.0
+THVS=10.0
+OPTTS=yes
+OPTWS=yes
+OPTNS=no
+OPTPS=no
+OPTFRZ=no
+############################################################
+# Edit here (hum, parameter, irrigation)
+############################################################
+DAYADVIRG=30
+FCTPAD=1.00
+FCTNONPAD=0.75
+############################################################
+# Edit here (hum, parameter, reservoir)
+############################################################
+KNORM=0.85       # alpha in Hanasaki et al. 2006
+OPTKRLS=yes      # yes: enable krls,
+OPTDAMRLS=H06    # H06 for res. operation shown  in Hanasaki et al. 2006
+OPTDAMWBC=no     # no:  do not execute water balance calculation
+############################################################
+# Edit here (hum, parameter, others)
+############################################################
+OPTNNB=no        # non-local & non-renwable water source (J. Hydrol., 2010)
+OPTHVSDOY=free   # fix or calculate harvesting date
+##OPTNNB=yes       # non-local & non-renwable water source (J. Hydrol., 2010)
+##OPTHVSDOY=fix    # fix or calculate harvesting date
+############################################################
+# Making Log file
+############################################################
+DATE=`date +"%Y%m%d"`
+DIRLOG=../../lnd/log
+if [ ! -d $DIRLOG ]; then
+  mkdir -p $DIRLOG
+fi
+LOGFILE=${DIRLOG}/${PRJ}${RUN}${DATE}.log
+############################################################
+# Making SET file (lnd)
+############################################################
+DIRSET=../../lnd/set
+if [ ! -d $DIRSET ]; then
+  mkdir -p $DIRSET
+fi
+SETLND=${DIRSET}/${PRJ}${RUN}${DATE}.set
+#
+if [ -f $SETLND ]; then
+  rm $SETLND
+fi
+#
+cat <<EOF>> $SETLND
+&setlnd
+i0yearmin=$YEARMIN
+i0yearmax=$YEARMAX
+i0secint=$SECINT
+i0ldbg=$LDBG
+i0cntc=$CNTC
+
+
+i0spnflg=$SPNFLG
+r0spnerr=$SPNERR
+r0spnrat=$SPNRAT
+r0engbalc=$ENGBALC
+r0watbalc=$WATBALC
+
+
+c0lndmsk='$LNDMSK'
+c0soildepth='$SOILDEPTH'
+c0w_fieldcap='$FIELDCAP'
+c0w_wilt='$WILT'
+c0cg='$CG'
+c0gamma='$GAMMA'
+c0tau='$TAU'
+c0balbedo='$BALBEDO'
+
+
+c0wind='$WIND'
+c0rainf='$RAINF'
+c0snowf='$SNOWF'
+c0tair='$TAIR'
+c0qair='$QAIR'
+c0rh='$RH'
+c0psurf='$PSURF'
+c0swdown='$SWDOWN'
+c0lwdown='$LWDOWN'
+
+
+c1soilmoist(0)='$SOILMOIST0'
+c1soiltemp(0)='$SOILTEMP0'
+c1avgsurft(0)='$AVGSURFT0'
+c1swe(0)='$SWE0'
+c1swnet(0)='$SWNET0'
+c1lwnet(0)='$LWNET0'
+c1qle(0)='$QLE0'
+c1qh(0)='$QH0'
+c1qg(0)='$QG0'
+c1qf(0)='$QF0'
+c1qv(0)='$QV0'
+c1evap(0)='$EVAP0'
+c1qs(0)='$QS0'
+c1qsb(0)='$QSB0'
+c1qtot(0)='$QTOT0'
+c1qsm(0)='$QSM0'
+c1qst(0)='$QST0'
+c1albedo(0)='$ALBEDO0'
+c1soilwet(0)='$SALBEDO0'
+c1potevap(0)='$POTEVAP0'
+c1et(0)='$ET0'
+c1subsnow(0)='$SUBSNOW0'
+c1salbedo(0)='$SALBEDO0'
+
+
+c1soilmoist(1)='$SOILMOIST1'
+c1soiltemp(1)='$SOILTEMP1'
+c1avgsurft(1)='$AVGSURFT1'
+c1swe(1)='$SWE1'
+c1swnet(1)='$SWNET1'
+c1lwnet(1)='$LWNET1'
+c1qle(1)='$QLE1'
+c1qh(1)='$QH1'
+c1qg(1)='$QG1'
+c1qf(1)='$QF1'
+c1qv(1)='$QV1'
+c1evap(1)='$EVAP1'
+c1qs(1)='$QS1'
+c1qsb(1)='$QSB1'
+c1qtot(1)='$QTOT1'
+c1qsm(1)='$QSM1'
+c1qst(1)='$QST1'
+c1albedo(1)='$ALBEDO1'
+c1soilwet(1)='$SALBEDO1'
+c1potevap(1)='$POTEVAP1'
+c1et(1)='$ET1'
+c1subsnow(1)='$SUBSNOW1'
+c1salbedo(1)='$SALBEDO1'
+
+
+c1soilmoistini(0)='$SOILMOISTINI0'
+c1soiltempini(0)='$SOILTEMPINI0'
+c1avgsurftini(0)='$AVGSURFTINI0'
+c1sweini(0)='$SWEINI0'
+
+
+c1soilmoistini(1)='$SOILMOISTINI1'
+c1soiltempini(1)='$SOILTEMPINI1'
+c1avgsurftini(1)='$AVGSURFTINI1'
+c1sweini(1)='$SWEINI1'
+
+
+c0tcor='$TCOR'
+c0pcor='$PCOR'
+c0lcor='$LCOR'
+c0tairout='$TAIROUT'
+c0rainfout='$RAINFOUT'
+c0snowfout='$SNOWFOUT'
+c0lwdownout='$LWDOWNOUT'
+
+
+EOF
+
+
+if [ $NOFMOS -ge 2 ]; then
+  cat <<EOF>> $SETLND
+
+
+c1soilmoist(2)='$SOILMOIST2'
+c1soiltemp(2)='$SOILTEMP2'
+c1avgsurft(2)='$AVGSURFT2'
+c1swe(2)='$SWE2'
+c1swnet(2)='$SWNET2'
+c1lwnet(2)='$LWNET2'
+c1qle(2)='$QLE2'
+c1qh(2)='$QH2'
+c1qg(2)='$QG2'
+c1qf(2)='$QF2'
+c1qv(2)='$QV2'
+c1evap(2)='$EVAP2'
+c1qs(2)='$QS2'
+c1qsb(2)='$QSB2'
+c1qtot(2)='$QTOT2'
+c1qsm(2)='$QSM2'
+c1qst(2)='$QST2'
+c1albedo(2)='$ALBEDO2'
+c1soilwet(2)='$SALBEDO2'
+c1potevap(2)='$POTEVAP2'
+c1et(2)='$ET2'
+c1subsnow(2)='$SUBSNOW2'
+c1salbedo(2)='$SALBEDO2'
+
+
+c1soilmoistini(2)='$SOILMOISTINI2'
+c1soiltempini(2)='$SOILTEMPINI2'
+c1avgsurftini(2)='$AVGSURFTINI2'
+c1sweini(2)='$SWEINI2'
+
+
+EOF
+fi
+
+
+if [ $NOFMOS -ge 3 ]; then
+  cat <<EOF>> $SETLND
+c1soilmoist(3)='$SOILMOIST3'
+c1soiltemp(3)='$SOILTEMP3'
+c1avgsurft(3)='$AVGSURFT3'
+c1swe(3)='$SWE3'
+c1swnet(3)='$SWNET3'
+c1lwnet(3)='$LWNET3'
+c1qle(3)='$QLE3'
+c1qh(3)='$QH3'
+c1qg(3)='$QG3'
+c1qf(3)='$QF3'
+c1qv(3)='$QV3'
+c1evap(3)='$EVAP3'
+c1qs(3)='$QS3'
+c1qsb(3)='$QSB3'
+c1qtot(3)='$QTOT3'
+c1qsm(3)='$QSM3'
+c1qst(3)='$QST3'
+c1albedo(3)='$ALBEDO3'
+c1soilwet(3)='$SALBEDO3'
+c1potevap(3)='$POTEVAP3'
+c1et(3)='$ET3'
+c1subsnow(3)='$SUBSNOW3'
+c1salbedo(3)='$SALBEDO3'
+
+
+c1soiltempini(3)='$SOILTEMPINI3'
+c1soilmoistini(3)='$SOILMOISTINI3'
+c1avgsurftini(3)='$AVGSURFTINI3'
+c1sweini(3)='$SWEINI3'
+
+
+EOF
+fi
+
+
+cat <<EOF>> $SETLND
+&end
+EOF
+############################################################
+# Making SET file (riv)
+############################################################
+DIRSET=../../riv/set
+if [ ! -d $DIRSET ]; then
+  mkdir -p $DIRSET
+fi
+SETRIV=${DIRSET}/${PRJ}${RUN}${DATE}.set
+if [ -f $SETRIV ]; then
+  rm $SETRIV
+fi
+cat << EOF >> $SETRIV
+&setriv
+i0yearmin=$YEARMIN
+i0yearmax=$YEARMAX
+i0ldbg=$LDBG
+i0secint=$SECINT
+c0qtot='$QTOT'
+c0rivsto='$RIVSTO'
+c0dis='$DIS'
+c0rivstoini='$RIVSTOINI'
+c0rivseq='$RIVSEQ'
+c0rivnxl='$RIVNXL'
+c0rivnxd='$RIVNXD'
+c0lndara='$LNDARA'
+c0flwvel='$FLWVEL'
+c0medrat='$MEDRAT'
+i0spnflg=$SPNFLG
+r0spnerr=$SPNERR
+r0spnrat=$SPNRAT
+&end
+EOF
+############################################################
+# Making SET file (human)
+############################################################
+DIRSET=../../dam/set
+if [ ! -d $DIRSET ]; then
+  mkdir -p $DIRSET
+fi
+SETHUM=${DIRSET}/${PRJ}${RUN}${DATE}.set
+if [ -f $SETHUM ]; then
+  rm $SETHUM
+fi
+cat << EOF >> $SETHUM
+&sethum
+r0knorm=$KNORM
+c0optkrls='$OPTKRLS'
+c0optdamrls='$OPTDAMRLS'
+c0optdamwbc='$OPTDAMWBC'
+c0optnnb='$OPTNNB'
+c0opthvsdoy='$OPTHVSDOY'
+c0damid_='$DAMID_'
+c0damprp='$DAMPRP'
+c01stmon='$DAMMON1ST'
+c0damcap='$DAMCAP'
+c0pndcap='$PNDCAP'
+c0demagrfix='$DAMDEMAGRFIX'
+c0demind='$DEMIND'
+c0demdom='$DEMDOM'
+c0envflw='$ENVFLW'
+c0rivoutfix='$DAMRIVOUTFIX'
+c0damsrf='$DAMSRF'
+c0damalc='$DAMALC'
+c0damsto='$DAMSTO'
+c0pndsto='$PNDSTO'
+c0damstoini='$DAMSTOINI'
+c0pndstoini='$PNDSTOINI'
+c0daminf='$DAMINF'
+c0damout='$DAMOUT'
+c0damdem='$DAMDEM'
+c0pndinf='$PNDINF'
+c0pndout='$PNDOUT'
+c0supind='$SUPIND'
+c0supdom='$SUPDOM'
+c0supagrriv='$SUPAGRRIV'
+c0supindriv='$SUPINDRIV'
+c0supdomriv='$SUPDOMRIV'
+c0supagrpnd='$SUPAGRPND'
+c0supindpnd='$SUPINDPND'
+c0supdompnd='$SUPDOMPND'
+c0supagrnnb='$SUPAGRNNB'
+c0supindnnb='$SUPINDNNB'
+c0supdomnnb='$SUPDOMNNB'
+
+
+i0dayadvirg=$DAYADVIRG
+r0fctpad=$FCTPAD
+r0fctnonpad=$FCTNONPAD
+
+
+c1pltdoy(1)='$PLTDOY1'
+c1pltdoy(2)='$PLTDOY2'
+c1hvsdoy(1)='$HVSDOY1'
+c1hvsdoy(2)='$HVSDOY2'
+c1crptyp(1)='$CRPTYP1'
+c1crptyp(2)='$CRPTYP2'
+
+
+c0lndara='$LNDARA'
+c0supagr='$SUPAGR'
+c1demagr(0)='$DEMAGR0'
+
+
+c1demagr(1)='$DEMAGR1'
+c1arafrc(1)='$ARAFRC1'
+c1optlnduse(1)='$OPTLNDUSE1'
+EOF
+
+
+if [ $NOFMOS -ge 2 ]; then
+  cat <<EOF>> $SETHUM
+c1demagr(2)='$DEMAGR2'
+c1arafrc(2)='$ARAFRC2'
+c1optlnduse(2)='$OPTLNDUSE2'
+EOF
+fi
+
+
+if [ $NOFMOS -ge 3 ]; then
+  cat <<EOF>> $SETHUM
+c1demagr(3)='$DEMAGR3'
+c1arafrc(3)='$ARAFRC3'
+c1optlnduse(3)='$OPTLNDUSE3'
+EOF
+fi
+
+
+cat <<EOF>> $SETHUM
+&end
+EOF
+############################################################
+# Making SET file (human)
+############################################################
+DIRSET=../../crp/set
+if [ ! -d $DIRSET ]; then
+  mkdir -p $DIRSET
+fi
+SETCRP=${DIRSET}/${PRJ}${RUN}${DATE}.set
+if [ -f $SETCRP ]; then
+  rm $SETCRP
+fi
+cat << EOF >> $SETCRP
+&setcrp
+i0crpdaymax=$INTCRPDAYMAX
+r0regfmin=$REGFMIN
+r0tdorm=$TDORM
+r0tfrz=$TFRZ
+r0hunmax=$HUNMAX
+r0ihunmat=$IHUNMAT
+r0tsaw=$TSAW
+r0thvs=$THVS
+c0optts='$OPTTS'
+c0optws='$OPTWS'
+c0optns='$OPTNS'
+c0optps='$OPTPS'
+c0optfrz='$OPTFRZ'
+c0ram2swim='$RAM2SWIM'
+c0swim2ram='$SWIM2RAM'
+c0crppar='$CRPPAR'
+
+
+c1hunaini(0)='$HUNAINI0'
+c1swuini(0)='$SWUINI0'
+c1swpini(0)='$SWPINI0'
+c1regfwini(0)='$REGFWINI0'
+c1regflini(0)='$REGFLINI0'
+c1regfhini(0)='$REGFHINI0'
+c1regfnini(0)='$REGFNINI0'
+c1regfpini(0)='$REGFPINI0'
+c1btini(0)='$BTINI0'
+c1rsdini(0)='$RSDINI0'
+c1outbini(0)='$OUTBINI0'
+c1yldout1st(0)='$YLDOUT1ST0'
+c1cwdout1st(0)='$CWDOUT1ST0'
+c1cwsout1st(0)='$CWSOUT1ST0'
+c1regfdout1st(0)='$REGFDOUT1ST0'
+c1hvsdoyout1st(0)='$HVSDOYOUT1ST0'
+c1crpdayout1st(0)='$CRPDAYOUT1ST0'
+c1yldout2nd(0)='$YLDOUT2ND0'
+c1cwdout2nd(0)='$CWDOUT2ND0'
+c1cwsout2nd(0)='$CWSOUT2ND0'
+c1regfdout2nd(0)='$REGFDOUT2ND0'
+c1hvsdoyout2nd(0)='$HVSDOYOUT2ND0'
+c1crpdayout2nd(0)='$CRPDAYOUT2ND0'
+
+
+c1hunaini(1)='$HUNAINI1'
+c1swuini(1)='$SWUINI1'
+c1swpini(1)='$SWPINI1'
+c1regfwini(1)='$REGFWINI1'
+c1regflini(1)='$REGFLINI1'
+c1regfhini(1)='$REGFHINI1'
+c1regfnini(1)='$REGFNINI1'
+c1regfpini(1)='$REGFPINI1'
+c1btini(1)='$BTINI1'
+c1rsdini(1)='$RSDINI1'
+c1outbini(1)='$OUTBINI1'
+c1yldout1st(1)='$YLDOUT1ST1'
+c1cwdout1st(1)='$CWDOUT1ST1'
+c1cwsout1st(1)='$CWSOUT1ST1'
+c1regfdout1st(1)='$REGFDOUT1ST1'
+c1hvsdoyout1st(1)='$HVSDOYOUT1ST1'
+c1crpdayout1st(1)='$CRPDAYOUT1ST1'
+c1yldout2nd(1)='$YLDOUT2ND1'
+c1cwdout2nd(1)='$CWDOUT2ND1'
+c1cwsout2nd(1)='$CWSOUT2ND1'
+c1regfdout2nd(1)='$REGFDOUT2ND1'
+c1hvsdoyout2nd(1)='$HVSDOYOUT2ND1'
+c1crpdayout2nd(1)='$CRPDAYOUT2ND1'
+EOF
+
+
+if [ $NOFMOS -ge 2 ]; then
+  cat <<EOF>> $SETCRP
+c1hunaini(2)='$HUNAINI2'
+c1swuini(2)='$SWUINI2'
+c1swpini(2)='$SWPINI2'
+c1regfwini(2)='$REGFWINI2'
+c1regflini(2)='$REGFLINI2'
+c1regfhini(2)='$REGFHINI2'
+c1regfnini(2)='$REGFNINI2'
+c1regfpini(2)='$REGFPINI2'
+c1btini(2)='$BTINI2'
+c1rsdini(2)='$RSDINI2'
+c1outbini(2)='$OUTBINI2'
+c1yldout1st(2)='$YLDOUT1ST2'
+c1cwdout1st(2)='$CWDOUT1ST2'
+c1cwsout1st(2)='$CWSOUT1ST2'
+c1regfdout1st(2)='$REGFDOUT1ST2'
+c1hvsdoyout1st(2)='$HVSDOYOUT1ST2'
+c1crpdayout1st(2)='$CRPDAYOUT1ST2'
+c1yldout2nd(2)='$YLDOUT2ND2'
+c1cwdout2nd(2)='$CWDOUT2ND2'
+c1cwsout2nd(2)='$CWSOUT2ND2'
+c1regfdout2nd(2)='$REGFDOUT2ND2'
+c1hvsdoyout2nd(2)='$HVSDOYOUT2ND2'
+c1crpdayout2nd(2)='$CRPDAYOUT2ND2'
+EOF
+fi
+
+
+if [ $NOFMOS -ge 3 ]; then
+  cat <<EOF>> $SETCRP
+c1hunaini(3)='$HUNAINI3'
+c1swuini(3)='$SWUINI3'
+c1swpini(3)='$SWPINI3'
+c1regfwini(3)='$REGFWINI3'
+c1regflini(3)='$REGFLINI3'
+c1regfhini(3)='$REGFHINI3'
+c1regfnini(3)='$REGFNINI3'
+c1regfpini(3)='$REGFPINI3'
+c1btini(3)='$BTINI3'
+c1rsdini(3)='$RSDINI3'
+c1outbini(3)='$OUTBINI3'
+c1yldout1st(3)='$YLDOUT1ST3'
+c1cwdout1st(3)='$CWDOUT1ST3'
+c1cwsout1st(3)='$CWSOUT1ST3'
+c1regfdout1st(3)='$REGFDOUT1ST3'
+c1hvsdoyout1st(3)='$HVSDOYOUT1ST3'
+c1crpdayout1st(3)='$CRPDAYOUT1ST3'
+c1yldout2nd(3)='$YLDOUT2ND3'
+c1cwdout2nd(3)='$CWDOUT2ND3'
+c1cwsout2nd(3)='$CWSOUT2ND3'
+c1regfdout2nd(3)='$REGFDOUT2ND3'
+c1hvsdoyout2nd(3)='$HVSDOYOUT2ND3'
+c1crpdayout2nd(3)='$CRPDAYOUT2ND3'
+EOF
+fi
+
+
+cat <<EOF>> $SETCRP
+&end
+EOF
+############################################################
+# Start 
+############################################################
+echo "$PROG $SETLND $SETRIV $SETHUM $SETCRP > $LOGFILE 2>&1 &"
+      $PROG $SETLND $SETRIV $SETHUM $SETCRP > $LOGFILE 2>&1 &
+echo "$PROG: See [$LOGFILE] to check the execusion. For example by,"
+echo "% tail -f $LOGFILE"

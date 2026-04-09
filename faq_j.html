@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0
+ Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="GENERATOR" content="JustSystems Homepage Builder Version 15.0.12.0 for Windows" />
+<title>H08 | FAQ</title>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	var nav = $('.nav');	
+	var navTop = nav.offset().top;
+	$(window).scroll(function () {
+		var winTop = $(this).scrollTop();
+		if (winTop >= navTop) {
+			nav.addClass('fixed')
+		} else if (winTop <= navTop) {
+			nav.removeClass('fixed')
+		}
+	});
+	//サブナビゲーション
+	$('li', nav).hover(function(){
+		$('ul',this).slideDown('fast');
+	},
+	function(){
+		$('ul',this).slideUp('fast');
+	});
+});
+</script>
+<link href="h08.css" rel="stylesheet" type="text/css" />
+
+
+
+</head>
+<body>
+<div id="header"><a href="https://www.nies.go.jp/index.html" target="_blank"><img src="pictures/NIES_logo_01.png" alt="NIES" width="65" height="33" border="0" align="right" /></a>
+
+<a href="index.html"><img src="pictures/H08_logo_01.png" alt="2013 NIES Comference" width="251" height="116" border="0" /></a></div>
+<div class="nav"><ul class="clearfix">
+		<li><a href="index_j.html">ホーム</a></li>
+		<li><a href="introduction_j.html">はじめに</a></li>
+		<li><a href="manual_j.html">マニュアル</a></li>
+		<li><a href="sourcecode_j.html">ソースコード</a></li>
+		<li><a href="input_j.html">入力データ</a></li>
+       	<li><a href="bugs_update_j.html">バグ&amp;更新</a></li>
+       	<li><a href="faq_j.html">よくある質問</a></li>
+       	<li><a href="publication_j.html">出版物</a></li>
+       	<li><a href="viewer_j.html">ビュワー</a></li>
+  </ul></div>
+<div id="e_j_box">
+  <div align="right">
+<a href="faq.html">English</a> / <a href="faq_j.html">Japanese </a></div>
+</div>
+<div id="image_picture">
+</div>
+<div id="article"><!-- /#article -->
+
+
+<h1>よくある質問</h1>
+<h2>2km全国版に関する質問</h2>
+<ul>
+    <li class="li_level1">何から始めてよいか分かりません</li>
+    <li class="li_level2">H08はあくまでも研究をするためのソフトウェアのため、ご利用いただくまでに、大変な回り道をしなければなりません。2km全国版を実施するために、以下の通り、マニュアルを一つ一つ実施していってください。①UNIX/FORTRAN/Bourne Shell自習テキスト、②H08マニュアル利用辺第２版（H08 2018年版）、③H08　User's Manual Supplement 3: Regional Application -Case Study of the Korean Peninsula（英語版しかありません、マニュアルの英語のページをご覧ください）、④H08マニュアル補遺４ー九州の事例研究（2021/12/15現在作成中）。
+    <li class="li_level2">マニュアル実施の前提になるのはLinux環境の確保です。以前は、古いパソコンをLinuxに改修して頂いたり、新規にMacを購入して頂いたりしましたが、Windows 10以降はWindows Subsystems for Linux (WSL)で簡単に環境構築ができるようになりました。ついては、Windowsをお使いの方はWSLの導入をご検討ください。
+    <li class="li_level2">マニュアルを実施していると、設定を変えて走らせたくなるものです。ただし、設定を変えるとほとんどの場合動かなくなり、「元に戻す」ボタンもないため、元にも戻せなくなります。とにかく、マニュアルの指示通りに作業を進め、マニュアルをいったん完了してください。設定を変える際は、全ての設定項目が完全に理解できるようになるまで、一つずつ、少しずつ変えてください（パラメータを一つ変える、計算期間を１年ずらす、入力気象データを１要素（例：降水量）だけ差し替える、など）。
+    <li class="li_level2">H08には標準空間解像度があります。具体的には、0.5度（30分=55km）、5分(9km)、1分(2km)です。これ以外の解像度を設定するには入力データの性質・特徴やコード全体の知識が必要です。例えば、最終的に30秒(1km)の解像度が必要な場合も、まずは1分(2km)でモデル構築することを検討してください。同様に時間解像度は１日です。基本的に時間単位まではサポートしていますが、開発チーム自体、日未満の単位で計算を実施したことがここ10年ほどありません。基本的に日以外は動かないとお考え下さい。
+</ul>
+<h2>コンパイルに関する質問</h2>
+<ul>
+    <li class="li_level1">${DIRH08}/bin/htcreatencやhtputnctsがコンパイルできません。</li>
+    <li class="li_level2">adm/MkincludeのINCにnetcdfのincludeファイルのあるディレクトリへのパスが（netcdf.hというファイルがあるディレクトリ）、LIBにnetcdfのlibraryファイルのあるディレクトリへのパスが（libnetcdf.aというファイルがあるディレクトリ）設定されているか確認して下さい。</li>
+    <li class="li_level2">これらのプログラムはコンパイル時にnetcdfライブラリを読み込みますが、C言語とFortran言語のコンパイラのバージョンが異なる場合、うまく動作しないことがあるようです。</li>
+     <li class="li_level3">例えば、開発者の花崎もMac OSX (Leopard)上のgfortranではコンパイルに成功したことがありません。gfortranを使ってコンパイルに成功した場合は、是非どのようにされたか教えていただければ幸いです。</li>
+    <li class="li_level2">なお、この２つのプログラムはHformat形式のファイルをnetcdf形式に変換するときだけ使います。よって、「H08マニュアル利用編」にある標準的なシミュレーションを実施する上で必要ないので、コンパイルできない場合は問題を無視してください。</li>
+    <li class="li_level2"><strong>これらのソースコードの拡張子は.Fと大文字になっていますが、異常ではありません。変更するとコンパイルできなくなります。</strong></li>
+    <li class="li_level1">htstatが動きません。</li>
+    <li class="li_level2">.bashrcや.cshrcでPATHを設定する際、${DIRH08}/binへのパスを先頭に持ってきてください。例：export PATH=${DIRH08}/bin:${PATH}など。</li>
+</ul>
+
+<h2>実行に関する質問</h2>
+<ul>
+    <li class="li_level1">0.5度版を実行するとSegmentation Faultを起こします。</li>
+    <li class="li_level2">Intel Fortran Compilerを利用している場合、メモリの使用量が2GBに近づくとSegmentation Faultを起こすことがあります。そのときは、adm/Mkincludeにおいて、FCのオプションに"-heap-arrays"と加え、ソースコード全体を再コンパイルしてください。</li>
+    <li class="li_level2">それでもSegmentation Faultを起こす場合、次のサイトを参考にしてください。</li>
+    <li class="li_level3"><a href="https://software.intel.com/en-us/articles/intel-fortran-compiler-increased-stack-usage-of-80-or-higher-compilers-causes-segmentation-fault/" target="_blank">Intel Fortran Compilerの場合（外部サイト）</a></li>
+</ul>
+
+<h2>データに関する質問</h2>
+<ul>
+    <li class="li_level1">人口データはありませんか？</li>
+    <li class="li_level2">人口データに関しては、例えば<a href="https://sedac.ciesin.columbia.edu/gpw/" target="_blank">CIESIN GPWのデータサイト</a>から各解像度のグリッドデータが取得できます。</li>
+    <li class="li_level1">国境線データはありませんか？</li>
+    <li class="li_level2">同じく、CIESIN GPWのデータサイトから取得できます。</li>
+</ul>
+
+<h2>解析ツールに関する質問</h2>
+<ul>
+    <li class="li_level1">htdrawで図示する全球の図から、南極を外せませんか？</li>
+    <li class="li_level2">１度×１度の場合、以下のようにするとできます。</li>
+    <li class="li_level3">bin/htl2xl2y（古いバージョンの場合は、map/pre/prog_l2xl2y）を利用し、南緯60度以南を除去したl2x変換ファイルおよびl2y変換ファイルを作ります。; htl2xl2y 54000 360 150 ../dat/l2x_l2y_/l2x.onena.txt ../dat/l2x_l2y_/l2y.onena.txt</li>
+    <li class="li_level3">htdrawに以下の引数を与えます。; L=54000; X=360; Y=150; L2X=map/dat/l2x_l2y_/l2x.onena.txt; L2Y=map/dat/l2x_l2y_/l2y.onena.txt; LONMIN=-180; LONMAX=180; LATMIN=-60; LATMAX=90</li>
+    <li class="li_level1">経度(Lon)、緯度(Lat)の引数の与え方はどうするのですか？</li>
+    <li class="li_level2">東経を＋、西経を－に、北緯を＋、南緯を－にして表します。たとえば東経135度、北緯35度の場合、+135, +35となり、西経135度、南緯35度の場合は、-135, -35となります。</li>
+    <li class="li_level1">グリッドの基準になる場所はどこでしょうか？例えばLon/Lat が135°/35°、解像度が1°×1°のデータを取得した時、得られたデータは135°～136°×35°～36°のグリッドの値ですか？それとも、 134°～135°×34°～35°のグリッドの値ですか？</li>
+    <li class="li_level2">結論から言うと、この場合は式の関係から、134°～135°×34°～35°が表示されます。混乱を防ぐため、必ずグリッドの中心点の緯度・経度を引数に与えるようにしてください。たとえば、135°～136°×35°～36°のデータがほしい場合は、東経 135.5° 北緯35.5°を指定してください。通常、グリッドデータは、子午線や赤道から、緯度方向・経度方向に等間隔にグリッドが区切られます。１度×１度のグリッドデータで東経135度、北緯35度を指定した場合、ちょうど緯度方向の線と経度方向の線の交点を示すことになります。現在Htoolでは、空間内挿をせず、指定されたグリッドの最も近いグリッドの値を出すようになっていますが、このように交点を指定すると意図しないグリッドの値が出力される場合があります。</li>
+</ul>
+
+<h2>雑多な質問</h2>
+<ul>
+    <li class="li_level1">H08という名前の由来は何ですか？</li>
+    <li class="li_level2">H08を発表した論文Hanasaki et al. 2008のHと08をくっつけました。もともと名無しのモデルで、特に名前を付ける気もなかったのですが、モデルの国際相互比較プロジェクトへの参加が決まった時、名なしでは困ると言われて、この名前で登録しました。世界的に見ても変わった名前で、逆に覚えてもらいやすいようです。</li>
+</ul>
+
+
+</div>
+
+<div id="footer_box">
+  <div align="center">Copyright © 2013-2026 National Institute for Environmental Studies. All Rights Reserved.</div>
+</div>
+</body>
+</html>

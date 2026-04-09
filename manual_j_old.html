@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0
+ Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="GENERATOR" content="JustSystems Homepage Builder Version 15.0.12.0 for Windows" />
+<title>H08 | Manual</title>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	var nav = $('.nav');	
+	var navTop = nav.offset().top;
+	$(window).scroll(function () {
+		var winTop = $(this).scrollTop();
+		if (winTop >= navTop) {
+			nav.addClass('fixed')
+		} else if (winTop <= navTop) {
+			nav.removeClass('fixed')
+		}
+	});
+	//サブナビゲーション
+	$('li', nav).hover(function(){
+		$('ul',this).slideDown('fast');
+	},
+	function(){
+		$('ul',this).slideUp('fast');
+	});
+});
+</script>
+<link href="h08.css" rel="stylesheet" type="text/css" />
+
+
+
+</head>
+<body>
+<div id="header"><a href="https://www.nies.go.jp/index.html" target="_blank"><img src="pictures/NIES_logo_01.png" alt="NIES" width="65" height="33" border="0" align="right" /></a>
+
+<a href="index.html"><img src="pictures/H08_logo_01.png" alt="2013 NIES Comference" width="251" height="116" border="0" /></a></div>
+<div class="nav"><ul class="clearfix">
+		<li><a href="index_j.html">ホーム</a></li>
+		<li><a href="introduction_j.html">はじめに</a></li>
+		<li><a href="manual_j.html">マニュアル</a></li>
+		<li><a href="sourcecode_j.html">ソースコード</a></li>
+		<li><a href="input_j.html">入力データ</a></li>
+       	<li><a href="bugs_update_j.html">バグ&amp;更新</a></li>
+       	<li><a href="faq_j.html">よくある質問</a></li>
+       	<li><a href="publication_j.html">出版物</a></li>
+       	<li><a href="viewer_j.html">ビュワー</a></li>
+  </ul></div>
+<div id="e_j_box">
+  <div align="right">
+<a href="manual.html">English</a> / <a href="manual_j.html">Japanese </a></div>
+</div>
+<div id="image_picture">
+</div>
+<div id="article"><!-- /#article -->
+
+
+<h1>マニュアル</h1>
+
+<h2>UNIX/FORTRAN/Bourne Shell Script自習テキスト</h2>
+<ul>
+    <li class="li_level1">About</li>
+    <li class="li_level2">H08はUNIX環境のみで利用可能です。この冊子はH08を実施するために必要なUNIX環境の基本的な知識と技術を紹介します。</li>
+    <li class="li_level1">Materials</li>
+    <li class="li_level2"><a href="files/UNIXja_20140301.pdf" target="_blank">花崎直太, 新田友子 (2009), UNIX/FORTRAN/Bourne Shell Script自習テキスト, 68 pp, 国立環境研究所, つくば.</a></li>
+    <li class="li_level2">教材は<a href="files/unix_semi_20140301.tar.gz">こちら</a></li>
+    <li class="li_level1">History</li>
+    <li class="li_level2">教材と付録を改定しました（2014/03/01）。斉藤裕佑さんに感謝します。</li>
+    <li class="li_level2">小規模な改訂をしました（2012/06/01）。斉藤裕佑さんに感謝します。</li>
+    <li class="li_level2">組版を改良しました（2011/01/31）</li>
+</ul>
+<h2>H08マニュアル利用編第２版（H08 2018年版）</h2>
+<ul>
+    <li class="li_level1">About</li>
+    <li class="li_level2">この冊子はH08 2018年版(Hanasaki et al. 2018)の基本的な使いかたを紹介します。</li>
+    <li class="li_level1">Materials</li>
+    <li class="li_level2"><a href="files/USERja_20220418.pdf" target="_blank">花崎直太 (2019), H08マニュアル利用編, 72 pp, 国立環境研究所, つくば.</a></li>
+    <li class="li_level1">History</li>
+    <li class="li_level2">小規模な改訂をしました（2022/04/18）</li>
+    <li class="li_level2">Ver 20190701に合わせて改訂しました（2019/07/01）</li>
+    <li class="li_level2">公開を開始しました。（2019/01/01）</li>
+</ul>
+
+<h2>H08マニュアル解析編</h2>
+<ul>
+    <li class="li_level1">About</li>
+    <li class="li_level2">この冊子はH08の解析コマンドの使いかたを紹介します。<u><b>H08 2008年版、2018年版のどちらにも対応しています。</b></u></li>
+    <li class="li_level1">Materials</li>
+    <li class="li_level2"><a href="files/TOOLja_20130501.pdf" target="_blank">斉藤裕佑, 花崎直太(2012), H08マニュアル解析編, 80pp, 国立環境研究所, つくば.</a></li>
+    <li class="li_level2">教材は<a href="files/htool_semi_20130501.tar.gz">こちら</a></li>
+</ul>
+
+<h2>H08ユーザのためのArcGISマニュアル</h2>
+<ul>
+    <li class="li_level1">About</li>
+    <li class="li_level2">この冊子はH08の領域版を利用する際に必要になる地図の作成技術について述べています。一部未完のところがあります。</li>
+    <li class="li_level1">Materials</li>
+    <li class="li_level2"><a href="files/GISja_20140301.pdf" target="_blank">斉藤裕佑, 花崎直太(2014), H08ユーザのためのArcGISマニュアル〜各種ラスタと主題図の作成〜, 78pp, 国立環境研究所, つくば.</a></li>
+    <li class="li_level2">教材は<a href="files/GISsample_20140301.zip">こちら</a>。H08ファイル形式への変換に必要なスクリプトは<a href="files/prep_GIS.sh.txt">こちら</a></li>
+</ul>
+
+<hr>
+
+<h2>H08マニュアル利用編第１版（H08 2008年版）</h2>
+<ul>
+    <li class="li_level1">About</li>
+    <li class="li_level2">この冊子はH08 2008年版(Hanasaki et al. 2008)の基本的な使いかたを紹介します。</li>
+    <li class="li_level1">Materials</li>
+    <li class="li_level2"><a href="files/USERja_20160101.pdf" target="_blank">花崎直太, 山本隆広 (2010), H08マニュアル利用編, 69 pp, 国立環境研究所, つくば.</a></li>
+    <li class="li_level2"><a href="https://goo.gl/s2q4fl" target="_blank">動画マニュアル</a></li>
+    <li class="li_level1">History</li>
+    <li class="li_level2">付録を改定しました（2014/03/01）</li>
+    <li class="li_level2">Ver 20130501に合わせて改訂しました（2013/05/01）</li>
+    <li class="li_level2">Ver 20120801に合わせて改訂しました（2012/07/29）</li>
+    <li class="li_level2">Ver 20120101に合わせて改訂しました（2011/12/26）</li>
+    <li class="li_level2">組版を改良しました（2011/01/31）</li>
+</ul>
+
+<h2>H08マニュアル利用編補遺１：領域への適用ーチャオプラヤ川の事例研究</h2>
+<ul>
+    <li class="li_level1">About</li>
+    <li class="li_level2">この冊子はH08を特定の流域に適応するためにどうすればよいかを紹介します。<u><b>H08 2008年版のみに対応しています。</b></u></li>
+    <li class="li_level1">Materials</li>
+    <li class="li_level2"><a href="files/REGIONen_20140301.pdf" target="_blank">Hanasaki, N., C. Mateo, and Y. Saito (2012), H08 Manual User's Edition Supplement 1: Regional Application -Case Study of the Chao Phraya River, 43 pp, National Institute for Environmental Studies, Tsukuba, Japan</a>.（今のところ英語版しかありません）</li>
+    <li class="li_level1">History</li>
+    <li class="li_level2">付録を更新しました(2013/08/01)</li>
+</ul>
+
+
+</div>
+
+<div id="footer_box">
+  <div align="center">Copyright © 2013-2021 National Institute for Environmental Studies. All Rights Reserved.</div>
+</div>
+</body>
+</html>

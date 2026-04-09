@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0
+ Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="GENERATOR" content="JustSystems Homepage Builder Version 15.0.12.0 for Windows" />
+<title>H08 | Input Data</title>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	var nav = $('.nav');	
+	var navTop = nav.offset().top;
+	$(window).scroll(function () {
+		var winTop = $(this).scrollTop();
+		if (winTop >= navTop) {
+			nav.addClass('fixed')
+		} else if (winTop <= navTop) {
+			nav.removeClass('fixed')
+		}
+	});
+	//サブナビゲーション
+	$('li', nav).hover(function(){
+		$('ul',this).slideDown('fast');
+	},
+	function(){
+		$('ul',this).slideUp('fast');
+	});
+});
+</script>
+<link href="h08.css" rel="stylesheet" type="text/css" />
+
+
+
+</head>
+<body>
+<div id="header"><a href="https://www.nies.go.jp/index.html" target="_blank"><img src="pictures/NIES_logo_01.png" alt="NIES" width="65" height="33" border="0" align="right" /></a>
+
+<a href="index.html"><img src="pictures/H08_logo_01.png" alt="2013 NIES Comference" width="251" height="116" border="0" /></a></div>
+<div class="nav"><ul class="clearfix">
+		<li><a href="index_j.html">ホーム</a></li>
+		<li><a href="introduction_j.html">はじめに</a></li>
+		<li><a href="manual_j.html">マニュアル</a></li>
+		<li><a href="sourcecode_j.html">ソースコード</a></li>
+		<li><a href="input_j.html">入力データ</a></li>
+       	<li><a href="bugs_update_j.html">バグ&amp;更新</a></li>
+       	<li><a href="faq_j.html">よくある質問</a></li>
+       	<li><a href="publication_j.html">出版物</a></li>
+       	<li><a href="viewer_j.html">ビュワー</a></li>
+  </ul></div>
+<div id="e_j_box">
+  <div align="right">
+<a href="input.html">English</a> / <a href="input_j.html">Japanese </a></div>
+</div>
+<div id="image_picture">
+</div>
+<div id="article"><!-- /#article -->
+
+
+<h1>入力データ</h1>
+<p>H08の重要な入力データの一つである、全球気象データを共有するための <a href="https://ccca-scenario.nies.go.jp" target="_blank">データサーバ</a>が稼働しています。</p>
+
+
+</div>
+
+<div id="footer_box">
+  <div align="center">Copyright © 2013-2026 National Institute for Environmental Studies. All Rights Reserved.</div>
+</div>
+</body>
+</html>

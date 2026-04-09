@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0
+ Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="GENERATOR" content="JustSystems Homepage Builder Version 15.0.12.0 for Windows" />
+<title>H08 | Home</title>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	var nav = $('.nav');	
+	var navTop = nav.offset().top;
+	$(window).scroll(function () {
+		var winTop = $(this).scrollTop();
+		if (winTop >= navTop) {
+			nav.addClass('fixed')
+		} else if (winTop <= navTop) {
+			nav.removeClass('fixed')
+		}
+	});
+	//サブナビゲーション
+	$('li', nav).hover(function(){
+		$('ul',this).slideDown('fast');
+	},
+	function(){
+		$('ul',this).slideUp('fast');
+	});
+});
+</script>
+<link href="h08.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+<body>
+<div id="header"><a href="https://www.nies.go.jp/index.html" target="_blank"><img src="pictures/NIES_logo_01.png" alt="NIES" width="65" height="33" border="0" align="right" /></a>
+
+<a href="index.html"><img src="pictures/H08_logo_01.png" alt="2013 NIES Comference" width="251" height="116" border="0" /></a></div>
+<div class="nav"><ul class="clearfix">
+		<li><a href="index.html">HOME</a></li>
+		<li><a href="introduction.html">Introduction</a></li>
+		<li><a href="manual.html">Manuals</a></li>
+		<li><a href="sourcecode.html">Source code</a></li>
+		<li><a href="input.html">Input Data</a></li>
+       	<li><a href="bugs_update.html">Bugs &amp; Update</a></li>
+       	<li><a href="faq.html">FAQ</a></li>
+       	<li><a href="publication.html">Publications</a></li>
+       	<li><a href="viewer.html">Viewer</a></li>
+  </ul></div>
+<div id="e_j_box">
+  <div align="right">
+<a href="introduction.html">English</a> / <a href="introduction_j.html">Japanese </a></div>
+</div>
+<div id="image_picture">
+</div>
+<div id="article"><!-- /#article -->
+
+<h1>Introduction</h1>
+<h2>About H08</h2>
+<ul>
+    <li class="li_level1">H08 is an open source global hydrological model, mainly developed by Dr. Naota Hanasaki at the National Institute for Environmental Studies, Japan. H08 has been used for a number of studies on the global hydrological cycle and water resources. These studies include (1) a quantitative estimation of the impact of reservoir operations on the terrestrial hydrological cycle, (2) an assessment of global water scarcity taking into account the seasonality of water use and river flows in the world, (3) a quantitative estimation of global virtual water trade (i.e. water virtually traded between nations accompanied by the import and export of crop and livestock products), and (4) an assessment of global water scarcity in the 21st century taking into account climatic and socio-economic change. See <a href="publication.html">Publications</a> for details.</li>
+    <!--<li class="li_level1">The manuals, source code, and the global meteorological data server of H08 are freely available under their <a href="files/licence_en.pdf" target="_blank">terms and conditions</a>. See also <a href="files/policy_en.pdf" target="_blank">policy of disclosure</a>.</li>-->
+    <li class="li_level1">Source code of H08 are freely available on <a href="https://github.com/h08model/H08" target="_blank">GitHub</a> [From Dec 1 2023].</li>
+     <!--<li class="li_level1">H08 may be used for academic research and educational purposes only. Its use for commercial and other purposes is strictly prohibited.-->
+</ul>
+
+<p style="text-align:center;"><img src="files/Schematic_en_20241121.jpg" alt="Schematic diagram of H08" width="480" height="360" border="0" /><br>Schematic diagram of H08</p>
+
+<h2>About this web site</h2>
+<ul>
+    <li class="li_level1">This web site is prepared for the users of H08, hence the contents are quite technical.</li>
+    <li class="li_level1">If you wish to use H08, please read the articles listed in <a href="publication.html">Publications</a> first, and grasp the concepts and characteristics of the model. Next, please download the "H08 Manual User's Edition" at <a href="manual.html">Manuals</a>, and understand the required computational resources. If you decide to use H08, please send an email to Dr. Naota Hanasaki [hanasaki at nies.go.jp]. You will be instructed on how to access the source code server and the global meteorological data server. Bugs and update information and technical comments are available at <a href="bugs_update.html">Bugs & Update</a> and <a href="faq.html">FAQ</a>.</li>
+</ul>
+</div>
+
+<div id="footer_box">
+  <div align="center">Copyright © 2013-2026 National Institute for Environmental Studies. All Rights Reserved.</div>
+</div>
+</body>
+</html>

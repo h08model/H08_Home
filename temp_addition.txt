@@ -1,0 +1,5 @@
+﻿H08はこれまでに地球の水循環や水資源に関する多くの研究に利用されてきました。主なものとして、(1)貯水池（ダム）が地球の水循環に与える影響を評価したもの、(2)水利用と河川流量の季節性（雨期と乾季）に注目して世界の水不足を評価したもの、(3)農畜産物の輸出入に伴って仮想的に取引される水、いわゆるバーチャルウォーター貿易量を推定したもの、(4)地球温暖化による気候の変化と社会経済の変化が２１世紀の世界の水不足に及ぼす影響を評価したものなどがあります。
+
+H08 has been used for a number of studies on the global hydrological cycle and water resources. They include (1) a quantitative estimation of the impact of reservoir operations on the terrestrial hydrological cycle, (2) an assessment of global water scarcity taking into account the seasonality of water use and river flows in the world, (3) a quantitative estimation of global virtual water trade (i.e. water virtually traded between nations accompanied by the import and export of crop and livestock products), and (4) an assessment of global water scarcity in the 21st century taking into account climatic and socio-economic change.
+
+

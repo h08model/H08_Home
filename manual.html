@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0
+ Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="GENERATOR" content="JustSystems Homepage Builder Version 15.0.12.0 for Windows" />
+<title>H08 | Manual</title>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	var nav = $('.nav');	
+	var navTop = nav.offset().top;
+	$(window).scroll(function () {
+		var winTop = $(this).scrollTop();
+		if (winTop >= navTop) {
+			nav.addClass('fixed')
+		} else if (winTop <= navTop) {
+			nav.removeClass('fixed')
+		}
+	});
+	//サブナビゲーション
+	$('li', nav).hover(function(){
+		$('ul',this).slideDown('fast');
+	},
+	function(){
+		$('ul',this).slideUp('fast');
+	});
+});
+</script>
+<link href="h08.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+<body>
+<div id="header"><a href="https://www.nies.go.jp/index.html" target="_blank"><img src="pictures/NIES_logo_01.png" alt="NIES" width="65" height="33" border="0" align="right" /></a>
+
+<a href="index.html"><img src="pictures/H08_logo_01.png" alt="2013 NIES Comference" width="251" height="116" border="0" /></a></div>
+<div class="nav"><ul class="clearfix">
+		<li><a href="index.html">HOME</a></li>
+		<li><a href="introduction.html">Introduction</a></li>
+		<li><a href="manual.html">Manuals</a></li>
+		<li><a href="sourcecode.html">Source code</a></li>
+		<li><a href="input.html">Input Data</a></li>
+       	<li><a href="bugs_update.html">Bugs &amp; Update</a></li>
+       	<li><a href="faq.html">FAQ</a></li>
+       	<li><a href="publication.html">Publications</a></li>
+       	<li><a href="viewer.html">Viewer</a></li>
+  </ul></div>
+<div id="e_j_box">
+  <div align="right">
+<a href="manual.html">English</a> / <a href="manual_j.html">Japanese </a></div>
+</div>
+<div id="image_picture">
+</div>
+<div id="article"><!-- /#article -->
+
+
+<h1>Manuals</h1>
+<h2>UNIX/FORTRAN/Bourne Shell Script Self-study Text</h2>
+<ul>
+    <li class="li_level1">About the manual</li>
+    <li class="li_level2">H08 works under the UNIX environment only. This textbook introduces the basic knowledge and techniques of the UNIX computational environment to operate H08.</li>
+    <li class="li_level1">Materials</li>
+    <li class="li_level2"><a href="files/UNIXen_20220701.pdf" target="_blank">Hanasaki, N. and T. Nitta (2009), UNIX/FORTRAN/Bourne Shell Script Self-study Text, 71 pp, National Institute for Environmental Studies, Tsukuba, Japan</a>.</li>
+    <li class="li_level2">Click <a href="files/unix_semi_20140301.tar.gz">here</a> for the lecture material.</li>
+    <li class="li_level1">History of improvements</li>
+    <li class="li_level2">Update of the material and appendices (2014/03/01). Special thanks to Mr. Yusuke Saito.</li>
+    <li class="li_level2">Minor corrections and update (2012/06/01). Special thanks to Mr. Yusuke Saito.</li>
+    <li class="li_level2">Typesetting improved (2011/01/31)</li>
+</ul>
+<h2>H08 User's Manual Second Edition for H08 ver 2018</h2>
+    <li class="li_level1">About the manual</li>
+    <li class="li_level2">This manual introudces the basic usage of H08 version 2018 (Hanasaki et al. 2018).</li>
+    <li class="li_level1">Materials</li>
+    <li class="li_level2"><a href="files/USERen_20250806.pdf" target="_blank">Hanasaki, N. (2019), H08 Manual User's Edition Second Edition, 77 pp,National Institute for Environmental Studies, Tsukuba, Japan</a>.</li>
+    <li class="li_level2">Click <a href="files/Data_Global_2018.20240301.tar.gz">here</a> for the geographical input data.</li>
+    <li class="li_level2">Click <a href="files/H08_Installation_Manual_Windows_202511.pdf" target="_blank">here</a> to obtain the H08 Installation Manual for Windows.</li>
+    <li class="li_level2">Click <a href="files/H08_Installation_Manual_MacOS_Edition_revision2.pdf" target="_blank">here</a> to obtain the H08 Installation Manual for MacOS.</li>
+    <li class="li_level2"><b>[For Advanced Users]</b> Click <a href="files/H08_Manual_for_Parallel_Computing_v2.pdf" target="_blank">here</a> to obtain the Parallel Computing Manual.</li>
+    <li class="li_level1">History of improvements</li>
+    <li class="li_level2">Updated Installation Manual for Windows.(2025/11/18)</li>
+    <li class="li_level2">Update contents to match source code publication on GitHub.(2023/12/01)</li>
+    <li class="li_level2">Minor corrections and update (2023/07/24)</li>
+    <li class="li_level2">Minor corrections and update (2022/04/18)</li>
+    <li class="li_level2">Updated (2019/07/01)</li>
+    <li class="li_level2">English proofread (2019/02/01)</li>
+    <li class="li_level2">Released (2019/01/01)</li>
+
+<h2>H08 User's Manual Supplement 3: Regional Application -Case Study of the Korean Peninsula</h2>
+<ul>
+    <li class="li_level1">About the manual</li>
+    <li class="li_level2">This manual introudces how to apply the H08 to a specific river basin. The contents are generic to application to any rivers or regions. <b><u>Compatible with H08 version 2018.</b></u></li>
+    <li class="li_level1">Materials</li>
+    <li class="li_level2"><a href="files/KOREAen_20231128.pdf" target="_blank">Hanasaki, N., H. Kamoshida, H.Matsuda (2020), H08 Manual User's Edition Supplement 3: Regional Application -Case Study of the Korean Peninsula, 40 pp, National Institute for Environmental Studies, Tsukuba, Japan</a>.</li>
+    <li class="li_level2">Click <a href="files/Data_Regional_2018.20231101.tar.gz">here</a> for the geographical input data.</li>
+    <li class="li_level1">History of improvements</li>
+    <li class="li_level2">update contents to match source code publication on GitHub.(2023/12/01)</li>
+    <li class="li_level2">Minor corrections and update(2023/10/17)</li>
+    <li class="li_level2">First released(2020/02/07)</li>
+</ul>
+
+<h2>H08 Analyzer's Manual</h2>
+<ul>
+    <li class="li_level1">About the manual</li>
+    <li class="li_level2">This textbook introduces the usage of analyzer commands of H08. <b><u>Compatible with both H08 version 2008 and 2018.</b></u></li>
+    <li class="li_level1">Materials</li>
+    <li class="li_level2"><a href="files/TOOLen_20130501.pdf" target="_blank">Saito, Y. and Hanasaki, N. (2012), H08 Manual Analyzer's Edition, 81pp, National Institute for Environmental Studies, Tsukuba, Japan</a>.</li>
+    <li class="li_level2">Click <a href="files/htool_semi_20130501.tar.gz">here</a> for the lecture material.</li>
+</ul>
+
+<hr>
+
+<h2>H08 User's Manual First Edition for H08 ver 2008</h2>
+<ul>
+    <li class="li_level1">About the manual</li>
+    <li class="li_level2">This manual introudces the basic usage of H08 version 2008 (Hanasaki et al. 2008).</li>
+    <li class="li_level1">Materials</li>
+    <li class="li_level2"><a href="files/USERen_20160101.pdf" target="_blank">Hanasaki, N. and T. Yamamoto (2010), H08 Manual User's Edition, 76 pp,National Institute for Environmental Studies, Tsukuba, Japan</a>.</li>
+    <li class="li_level2"><a href="https://goo.gl/MOaPOy" target="_blank">Video tutorial</a>.</li>
+    <li class="li_level1">History of improvements</li>
+    <li class="li_level2">Updated Appendices(2014/03/01)</li>
+    <li class="li_level2">Title renamed due to editorial reasons (former "H08 User's manual").</li>
+    <li class="li_level2">Updated for Ver. 20130501 (2013/05/01)</li>
+    <li class="li_level2">Updated for Ver. 20120801 (2012/07/29)</li>
+    <li class="li_level2">Updated for Ver. 20120101 (2011/12/26)</li>
+    <li class="li_level2">Typesetting improved (2011/01/31)</li>
+</ul>
+
+<h2>H08 User's Manual Supplement 1: Regional Application -Case Study of the Chao Phraya River</h2>
+<ul>
+    <li class="li_level1">About the manual</li>
+    <li class="li_level2">This manual introudces how to apply the H08 to a specific river basin. The contents are specific to application to the Chao Phraya River in Thailand.<b><u>Compatible with H08 version 2008.</b></u></li>
+    <li class="li_level1">Materials</li>
+    <li class="li_level2"><a href="files/REGIONen_20140301.pdf" target="_blank">Hanasaki, N., C. Mateo, and Y. Saito (2012), H08 Manual User's Edition Supplement 1: Regional Application -Case Study of the Chao Phraya River, 43 pp, National Institute for Environmental Studies, Tsukuba, Japan</a>.</li>
+    <li class="li_level1">History of improvements</li>
+    <li class="li_level2">Updated Appendices(2013/08/01)</li>
+</ul>
+
+<h2>H08 User's Manual Supplement 2: Regional Application -Case Study of the Korean Peninsula</h2>
+<ul>
+    <li class="li_level1">About the manual</li>
+    <li class="li_level2">This manual introudces how to apply the H08 to a specific river basin. The contents are generic to application to any rivers or regions. <b><u>Compatible with H08 version 2008.</b></u></li>
+    <li class="li_level1">Materials</li>
+    <li class="li_level2"><a href="files/KOREAen_20190901.pdf" target="_blank">Hanasaki, N., H. Kamoshida (2019), H08 Manual User's Edition Supplement 2: Regional Application -Case Study of the Korean Peninsula, 40 pp, National Institute for Environmental Studies, Tsukuba, Japan</a>.</li>
+    <li class="li_level1">History of improvements</li>
+    <li class="li_level2">First released(2019/09/01)</li>
+</ul>
+
+</div>
+
+<div id="footer_box">
+  <div align="center">Copyright © 2013-2026 National Institute for Environmental Studies. All Rights Reserved.</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,343 @@
+﻿subroutine calc_humact(
+     $     n0l,         i0ldbg,
+     $     i0secint,    r1rivseq,    r0rivseqmax, 
+     $     r1nxtgrd,    r1lndara,    r1paramc,
+     $     r1rivstopre, r1qtot,      
+     $     r1rivsto,    r1rivinf,    r1rivout,
+     $     r1damsto,    r1daminf,    r1damout,
+     $     r1demagr,    r1demind,    r1demdom,
+     $     r1supagr,    r1supind,    r1supdom,
+     $     r1supagrriv, r1supindriv, r1supdomriv,
+     $     r1supagrpnd, r1supindpnd, r1supdompnd,
+     $     r1supagrnnb, r1supindnnb, r1supdomnnb,
+     $     c0optsrc,    r1envflw,
+     $     i1damid_,    r1damcap,    r1pndcap,
+     $     r1pndsto,    r1pndinf,    r1pndout)
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+cto   calculate river flows taking into account human activities
+cby   2010/09/30, hanasaki, NIES: H08ver1.0
+c     Copyright (C) 2010,2011 Naota Hanasaki
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      implicit none
+c parameter (array)
+      integer           n0l
+c parameter (default)
+      real              p0mis
+      parameter        (p0mis=1.0E20) 
+c index (array)
+      integer           i0l
+      integer           i0seq            !! river sequence
+c in (set)
+      integer           i0ldbg
+c in (fixed field)
+      integer           i0secint         !! interval [s]
+      real              r1rivseq(n0l)    !! river sequence [-]
+      real              r0rivseqmax      !! max of river sequence [-]
+      real              r1nxtgrd(n0l)    !! downstream grid [-]
+      real              r1lndara(n0l)    !! land area [m2]
+      real              r1paramc(n0l)    !! parameter c
+      real              r1damcap(n0l)
+      real              r1pndcap(n0l)
+      integer           i1damid_(n0l)
+c in
+      real              r1rivstopre(n0l) !! storage of current time step
+c in/out
+      real              r1damsto(n0l)    !! dam storage of the grid [kg]
+      real              r1pndsto(n0l)    !! medium sized reservoir storage
+c in (flux)
+      real              r1qtot(n0l)      !! runoff of the grid [kg/s]
+      real              r1damout(n0l)    !! medium sized reservoir outflow
+      real              r1demagr(n0l)    !! demand (agricultural water)
+      real              r1demind(n0l)    !! demand (industrial water)
+      real              r1demdom(n0l)    !! demand (domestic water)
+      real              r1envflw(n0l)    !! environmental flow requirement
+c in (set)
+      character*128     c0optsrc         !! 
+c out (flux)
+      real              r1rivinf(n0l)    !! river inflow of the grid  [kg/s]
+      real              r1rivsto(n0l)    !! river storage of the grid [kg]
+      real              r1rivout(n0l)    !! river outflow of the grid [kg/s]
+      real              r1pndinf(n0l)    !! medium sized reservoir inflow
+      real              r1pndout(n0l)    !! medium sized reservoir outflow
+      real              r1daminf(n0l)    !! medium sized reservoir inflow
+      real              r1supagr(n0l)    !! supply (agricultural water)
+      real              r1supind(n0l)    !! supply (industrial water)
+      real              r1supdom(n0l)    !! supply (domestic water)
+      real              r1supagrriv(n0l) !! supply from river
+      real              r1supindriv(n0l) !! supply from river
+      real              r1supdomriv(n0l) !! supply from river
+      real              r1supagrpnd(n0l) !! supply from medium sized reservoir
+      real              r1supindpnd(n0l) !! supply from medium sized reservoir
+      real              r1supdompnd(n0l) !! supply from medium sized reservoir
+      real              r1supagrnnb(n0l) !! supply from non-non blue water
+      real              r1supindnnb(n0l) !! supply from non-non blue water
+      real              r1supdomnnb(n0l) !! supply from non-non blue water
+c local
+      real              r1qtotmod(n0l)   !! 
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c Initialize
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c out
+      r1rivinf=0.0
+      r1rivout=0.0
+      r1pndinf=0.0
+      r1pndout=0.0
+      r1daminf=0.0
+      r1supagr=0.0
+      r1supind=0.0
+      r1supdom=0.0
+      r1supagrriv=0.0
+      r1supindriv=0.0
+      r1supdomriv=0.0
+      r1supagrpnd=0.0
+      r1supindpnd=0.0
+      r1supdompnd=0.0
+      r1supagrnnb=0.0
+      r1supindnnb=0.0
+      r1supdomnnb=0.0
+c local
+      r1qtotmod=0.0
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc 
+c Calculation
+c - loop starts (from upper stream to lower stream)
+c - medium sized reservoir (Hanasaki et al. 2010)
+c - inflow of each grid
+c - storage (See Eq.4 in Oki et al. 1999)
+c - outflow (See Eq.2 in Oki et al. 1999)
+c - reservoir operation
+c - flowing into the lower stream
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc 
+      do i0seq=1,int(r0rivseqmax)
+        do i0l=1,n0l
+          if(int(r1rivseq(i0l)).eq.i0seq) then
+c
+            if(c0optsrc.eq.'yes')then
+              r1pndinf(i0l)=r1qtot(i0l)*r1lndara(i0l)
+              r1pndsto(i0l)=r1pndsto(i0l)+r1pndinf(i0l)*real(i0secint)
+              if(r1pndsto(i0l).gt.r1pndcap(i0l))then
+                r1qtotmod(i0l)
+     $               = (r1pndsto(i0l)-r1pndcap(i0l))/real(i0secint)
+     $                / r1lndara(i0l)
+                r1pndsto(i0l)=r1pndcap(i0l)
+              else
+                r1qtotmod(i0l)=0.0
+              end if
+            else
+              r1qtotmod(i0l)=r1qtot(i0l)
+            end if
+d           if(i0l.eq.i0ldbg)then
+d             write(*,*) 'calc_humact: r1qtot   [mm/d]',
+d    $             r1qtot(i0ldbg)*real(i0secint)
+d             write(*,*) 'calc_humact: r1qtotmod[mm/d]',
+d    $             r1qtotmod(i0ldbg)*real(i0secint)
+d           end if
+c
+            if(r1lndara(i0l).ne.p0mis)then
+              r1rivinf(i0l)=r1rivinf(i0l)+r1qtotmod(i0l)*r1lndara(i0l)
+            end if
+d           if(i0l.eq.i0ldbg)then
+d             write(*,*) 'calc_humact: r1rivinf [m3/s]',
+d    $             r1rivinf(i0ldbg)/1000.0
+d           end if
+c 
+            if (r1paramc(i0l).ne.p0mis) then
+              r1rivsto(i0l)
+     $             =r1rivstopre(i0l)
+     $             *exp(-(r1paramc(i0l)*real(i0secint)))
+     $             +(1.0-exp(-(r1paramc(i0l)*real(i0secint))))
+     $             *r1rivinf(i0l)/r1paramc(i0l)
+            end if
+d           if(i0l.eq.i0ldbg)then
+d             write(*,*) 'calc_humact: r1rivsto [m3] ',
+d    $             r1rivsto(i0ldbg)/1000.0
+d           end if
+c rivout
+            if (r1paramc(i0l).ne.p0mis) then
+              r1rivout(i0l)
+     $             = r1rivinf(i0l)
+     $             -(r1rivsto(i0l)-r1rivstopre(i0l))/real(i0secint)
+            end if
+d           if(i0l.eq.i0ldbg)then
+d             write(*,*) 'calc_humact: r1rivout before withdrw[m3/s]',
+d    $             r1rivout(i0ldbg)/1000.0
+d           end if
+c dam    
+            if(i1damid_(i0l).ne.0)then
+              r1daminf(i0l)=r1rivout(i0l)
+              r1damsto(i0l)=r1damsto(i0l)
+     $             +(r1daminf(i0l)-r1damout(i0l))*real(i0secint)
+              if(r1damsto(i0l).gt.r1damcap(i0l))then
+                r1damout(i0l)=r1damout(i0l)
+     $               +(r1damsto(i0l)-r1damcap(i0l))/real(i0secint)
+                r1damsto(i0l)=r1damcap(i0l)
+              else if(r1damsto(i0l).lt.0.0)then
+                r1damout(i0l)=r1damout(i0l)
+     $               +r1damsto(i0l)/real(i0secint)
+                r1damsto(i0l)=0.0
+              end if
+              r1rivout(i0l)=r1damout(i0l)
+d             if(i0l.eq.i0ldbg)then
+d               write(*,*) 'calc_humact: r1damout',r1damout(i0ldbg)
+d               write(*,*) 'calc_humact: r1damsto',r1damsto(i0ldbg)
+d             end if
+            end if
+c dom
+            if(r1demdom(i0l).ne.p0mis)then
+              if(r1rivout(i0l)-r1envflw(i0l).gt.r1demdom(i0l))then
+                r1supdom(i0l)=r1demdom(i0l)
+                r1rivout(i0l)=r1rivout(i0l)-r1supdom(i0l)
+              else
+                r1supdom(i0l)=max(r1rivout(i0l)-r1envflw(i0l),0.0)
+                r1rivout(i0l)=r1rivout(i0l)-r1supdom(i0l)
+              end if
+            end if
+c ind
+            if(r1demind(i0l).ne.p0mis)then
+              if(r1rivout(i0l)-r1envflw(i0l).gt.r1demind(i0l))then
+                r1supind(i0l)=r1demind(i0l)
+                r1rivout(i0l)=r1rivout(i0l)-r1supind(i0l)
+              else
+                r1supind(i0l)=max(r1rivout(i0l)-r1envflw(i0l),0.0)
+                r1rivout(i0l)=r1rivout(i0l)-r1supind(i0l)
+              end if
+            end if
+c agr
+            if(r1demagr(i0l).ne.p0mis)then
+              if(r1rivout(i0l)-r1envflw(i0l).gt.r1demagr(i0l))then
+                r1supagr(i0l)=r1demagr(i0l)
+                r1rivout(i0l)=r1rivout(i0l)-r1supagr(i0l)
+              else
+                r1supagr(i0l)=max(r1rivout(i0l)-r1envflw(i0l),0.0)
+                r1rivout(i0l)=r1rivout(i0l)-r1supagr(i0l)
+              end if
+            end if
+d           if(i0l.eq.i0ldbg)then
+d             write(*,*) 'calc_humact: r1rivout after withdrw[m3/s]',
+d    $             r1rivout(i0ldbg)/1000.0
+d             write(*,*) 'calc_humact: r1demagr [m3/s]',
+d    $             r1demagr(i0ldbg)/1000.0
+d             write(*,*) 'calc_humact: r1demind [m3/s]',
+d    $             r1demind(i0ldbg)/1000.0
+d             write(*,*) 'calc_humact: r1demdom [m3/s]',
+d    $             r1demdom(i0ldbg)/1000.0
+d             write(*,*) 'calc_humact: r1supagr [m3/s]',
+d    $             r1supagr(i0ldbg)/1000.0
+d             write(*,*) 'calc_humact: r1supind [m3/s]',
+d    $             r1supind(i0ldbg)/1000.0
+d             write(*,*) 'calc_humact: r1supdom [m3/s]',
+d    $             r1supdom(i0ldbg)/1000.0
+d           end if
+c 
+            if (r1paramc(i0l).ne.p0mis) then
+              if (r1nxtgrd(i0l).ne.p0mis.and.r1nxtgrd(i0l).ne.0.0)then
+                r1rivinf(int(r1nxtgrd(i0l)))
+     $               =r1rivinf(int(r1nxtgrd(i0l)))
+     $               +r1rivout(i0l)
+              end if
+            end if
+c
+          end if
+        end do
+      end do
+c riv
+      do i0l=1,n0l
+        r1supdomriv(i0l)=r1supdom(i0l)
+      end do
+      do i0l=1,n0l
+        r1supindriv(i0l)=r1supind(i0l)
+      end do
+      do i0l=1,n0l
+        r1supagrriv(i0l)=r1supagr(i0l)
+      end do
+c
+      if(c0optsrc.eq.'yes')then
+c pnd,dom
+        do i0l=1,n0l
+          if(r1demdom(i0l).ne.p0mis)then
+            if(r1demdom(i0l)-r1supdom(i0l).gt.0.0)then
+              if((r1demdom(i0l)-r1supdom(i0l))*real(i0secint).lt.
+     $             r1pndsto(i0l))then
+                r1supdompnd(i0l)=r1demdom(i0l)-r1supdom(i0l)
+              else
+                r1supdompnd(i0l)=r1pndsto(i0l)/real(i0secint)
+              end if
+              r1supdom(i0l)=r1supdom(i0l)+r1supdompnd(i0l)
+              r1pndsto(i0l)
+     $             =r1pndsto(i0l)-r1supdompnd(i0l)*real(i0secint)
+            else
+              r1supdompnd(i0l)=0.0
+            end if
+          end if
+        end do
+c pnd,ind
+        do i0l=1,n0l
+          if(r1demind(i0l).ne.p0mis)then
+            if(r1demind(i0l)-r1supind(i0l).gt.0.0)then
+              if((r1demind(i0l)-r1supind(i0l))*real(i0secint).lt.
+     $             r1pndsto(i0l))then
+                r1supindpnd(i0l)=r1demind(i0l)-r1supind(i0l)
+              else
+                r1supindpnd(i0l)=r1pndsto(i0l)/real(i0secint)
+              end if
+              r1supind(i0l)=r1supind(i0l)+r1supindpnd(i0l)
+              r1pndsto(i0l)
+     $             =r1pndsto(i0l)-r1supindpnd(i0l)*real(i0secint)
+            else
+              r1supindpnd(i0l)=0.0
+            end if
+          end if
+        end do
+c pnd,agr
+        do i0l=1,n0l
+          if(r1demagr(i0l).ne.p0mis)then
+            if(r1demagr(i0l)-r1supagr(i0l).gt.0.0)then
+              if((r1demagr(i0l)-r1supagr(i0l))*real(i0secint).lt.
+     $             r1pndsto(i0l))then
+                r1supagrpnd(i0l)=r1demagr(i0l)-r1supagr(i0l)
+              else
+                r1supagrpnd(i0l)=r1pndsto(i0l)/real(i0secint)
+              end if
+              r1supagr(i0l)=r1supagr(i0l)+r1supagrpnd(i0l)
+              r1pndsto(i0l)
+     $             =r1pndsto(i0l)-r1supagrpnd(i0l)*real(i0secint)
+            else
+              r1supagrpnd(i0l)=0.0
+            end if
+          end if
+        end do
+c nnbw,dom
+        do i0l=1,n0l
+          if(r1demdom(i0l).ne.p0mis)then
+            if(r1demdom(i0l)-r1supdom(i0l).gt.0.0)then
+              r1supdomnnb(i0l)=r1demdom(i0l)-r1supdom(i0l)
+              r1supdom(i0l)=r1supdom(i0l)+r1supdomnnb(i0l)
+            else
+              r1supdomnnb(i0l)=0.0
+            end if
+          end if
+        end do
+c nnbw,ind
+        do i0l=1,n0l
+          if(r1demind(i0l).ne.p0mis)then
+            if(r1demind(i0l)-r1supind(i0l).gt.0.0)then
+              r1supindnnb(i0l)=r1demind(i0l)-r1supind(i0l)
+              r1supind(i0l)=r1supind(i0l)+r1supindnnb(i0l)
+            else
+              r1supindnnb(i0l)=0.0
+            end if
+          end if
+        end do
+c nnbw,agr
+        do i0l=1,n0l
+          if(r1demagr(i0l).ne.p0mis)then
+            if(r1demagr(i0l)-r1supagr(i0l).gt.0.0)then
+              r1supagrnnb(i0l)=r1demagr(i0l)-r1supagr(i0l)
+              r1supagr(i0l)=r1supagr(i0l)+r1supagrnnb(i0l)
+            else
+              r1supagrnnb(i0l)=0.0
+            end if
+          end if
+        end do
+      end if
+c
+      end

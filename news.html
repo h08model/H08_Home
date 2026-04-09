@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0
+ Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="GENERATOR" content="JustSystems Homepage Builder Version 15.0.12.0 for Windows" />
+<title>H08 | Publication</title>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	var nav = $('.nav');	
+	var navTop = nav.offset().top;
+	$(window).scroll(function () {
+		var winTop = $(this).scrollTop();
+		if (winTop >= navTop) {
+			nav.addClass('fixed')
+		} else if (winTop <= navTop) {
+			nav.removeClass('fixed')
+		}
+	});
+	//サブナビゲーション
+	$('li', nav).hover(function(){
+		$('ul',this).slideDown('fast');
+	},
+	function(){
+		$('ul',this).slideUp('fast');
+	});
+});
+</script>
+<link href="h08.css" rel="stylesheet" type="text/css" />
+
+
+
+</head>
+<body>
+<div id="header"><a href="https://www.nies.go.jp/index.html" target="_blank"><img src="pictures/NIES_logo_01.png" alt="NIES" width="65" height="33" border="0" align="right" /></a>
+
+<a href="index.html"><img src="pictures/H08_logo_01.png" alt="2013 NIES Comference" width="251" height="116" border="0" /></a></div>
+<div class="nav"><ul class="clearfix">
+		<li><a href="index.html">HOME</a></li>
+		<li><a href="introduction.html">Introduction</a></li>
+		<li><a href="manual.html">Manual</a></li>
+		<li><a href="sourcecode.html">Source code</a></li>
+		<li><a href="input.html">Input Data</a></li>
+       	<li><a href="bugs_update.html">Bugs &amp; Update</a></li>
+       	<li><a href="faq.html">FAQ</a></li>
+       	<li><a href="publication.html">Publication</a></li>
+  </ul></div>
+<div id="e_j_box">
+  <div align="right">
+<a href="index.html">English</a> / <a href="index_j.html">Japanese </a></div>
+</div>
+<div id="image_picture">
+</div>
+<div id="article"><!-- /#article -->
+  <h1>ニュース</h1>
+
+  <p>H08に関連するイベントを取り上げます。</p>
+  <ul>
+      <li class="li_level1">[2012/11/20]H08の新しいマニュアル「解析編」ができました。筑波大学の斉藤裕佑さんの力作で、難解だった解析ツール(${DIRH08/bin}のコマンド群)を分かりやすく解説しています。ぜひご覧ください。</li>
+      <li class="li_level1">[2012/09/14]山本隆広さんが平成24年度地球環境論文賞を受賞しました。対象となった論文は「山本隆広，花崎直太，高橋　潔，肱岡靖明，申　龍熙：地球温暖化による世界の水資源影響評価とその適応策に関する一考察，土木学会論文集G（環境）, 第67巻5号，pp.I_1-I_8.」です。おめでとうございます。</li>
+      <li class="li_level1">[2012/08/01]H08の新バージョン、Ver 20120801がリリースされました。詳しくは、<a href="sourcecode_j.html">こちら</a>を見てください。</li>
+      <li class="li_level1">[2011/12/27]H08の新バージョン、Ver 20120101がリリースされました。詳しくは、<a href="sourcecode_j.html">こちら</a>を見てください。</li>
+      <li class="li_level1">[2011/11/22]沖研究室のサーバ運用ポリシーの変更に伴い、H08の全ての入力データを「環境研のファイル交換サーバ」に移しました。このサーバにアクセスしたい方は、花崎（hanasaki at nies.go.jp）までご連絡ください。</li>
+      <li class="li_level1">沖研究室のサーバ運用のポリシーが変更されました。これに伴い、FTPがうまく接続できなくなっていので注意してください。ftpやwgetを利用するコマンドでは、それぞれ-Aと--no-passive-ftpをつけてみてください。それでもうまくいかない場合は、花崎（hanasaki at nies.go.jp）までご連絡ください。</li>
+      <li class="li_level1">次のH08のリリースは2011年10月頃を予定しています。以下の機能が加わります。</li>
+      <li class="li_level2">バーチャルウォーターを計算できるよう、主にメインプログラムが改良されました。</li>
+      <li class="li_level2">気象データとしてNCCが取得できるようになります。</li>
+      <li class="li_level2">時系列データの図化や解析が大幅に強化されました。</li>
+      <li class="li_level1">論文が受理されました。</li>
+      <li class="li_level2">2011年2月に仮想水に関する論文が２本受理されました。この論文で、H08は仮想水の原単位を提供しました。Konar et al. "Water for food: The global virtual water trade network" (Water Resources Research); Suweis et al. "Structure and Controls of the Global Virtual Water Trade Network" (Geophysical Research Letters)。おめでとうございます。</li>
+      <li class="li_level1">ソースコードとマニュアルのアップデートが行われました。</li>
+      <li class="li_level2">2011年１月31日にソースコードとマニュアルのアップデートが行われました。ソースコードについては、これまでに見つかったバグを修正しました。また、マニュアルについてはこれまでに見つかった誤植を修正し、また組版（フォントやレイアウト）を改良しました。組版を改良したことで、UNIXマニュアル、USERマニュアル、日本語版、英語版で統一感がアップしました。</li>
+      <li class="li_level1">第１回H08英語講習会が開かれました</li>
+      <li class="li_level2">2010年12月20日から24日にかけて、タイのKasetsart大学にて第１回H08英語講習会が開かれました。６名の方が参加されました。</li>
+      <li class="li_level1">論文が受理されました。</li>
+      <li class="li_level2">2010年12月にH08を利用した温暖化影響評価に関する論文が１本受理されました。山本ら「季節性を考慮した水逼迫指標を用いた全球温暖化水資源評価」（水工学論文集）。おめでとうございます。</li>
+      <li class="li_level1">Nature誌に興味深いニュース記事が掲載されました</li>
+      <li class="li_level2"><a href="https://www.nature.com/news/2010/101013/full/467753a.html" target="_blank">一つ目の記事</a>は「研究者はソースコードをもっと公開しよう」というもの、<a href="https://www.nature.com/news/2010/101013/full/467775a.html" target="_blank">二つ目の記事</a>はコンピュータプログラムを利用した研究に潜むプログラムエラー（バグ等）に関するものです。どちらの記事もポイントが非常に明瞭にまとめられています。</li>
+      <li class="li_level1"><a href="https://www.eu-watch.org/nl/25222796-Modelling_Protocol.html" target="_blank">EU-WATCH Protocol2010</a>の計算を開始しました</li>
+      <li class="li_level2">2010/10/13: ECHAM A2 naturalizedを提出しました。</li>
+      <li class="li_level2">2010/10/27: CNRM A2 naturalizedを提出しました。</li>
+      <li class="li_level2">2010/11/17: IPSL A2 naturalizedを提出しました。</li>
+      <li class="li_level1">[2010/09/27]花崎が環境研でセミナー発表しました。</li>
+      <li class="li_level2">2010年9月27日花崎が環境研社会領域セミナーでH08の公開に関するセミナー発表を行いました。発表資料は<a href="https://www.nies.go.jp/social/seminar/H22/pdf/hanasaki2010_09.pdf" target="_blank">こちら</a>です。</li>
+      <li class="li_level1">[2010/08/28]第１回H08日本語講習会が開かれました</li>
+      <li class="li_level2">2010年8月23日から27日にかけて、東京大学生産技術研究所にて第１回H08日本語講習会が開かれました。１０名の方が参加されました。来年も開催予定ですので、奮ってご参加ください！</li>
+    </ul>
+ 
+
+</div>
+
+<div id="footer_box">
+  <div align="center">Copyright © 2013-2026 National Institute for Environmental Studies. All Rights Reserved.</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0
+ Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="GENERATOR" content="JustSystems Homepage Builder Version 15.0.12.0 for Windows" />
+<title>H08 | Viewer</title>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	var nav = $('.nav');	
+	var navTop = nav.offset().top;
+	$(window).scroll(function () {
+		var winTop = $(this).scrollTop();
+		if (winTop >= navTop) {
+			nav.addClass('fixed')
+		} else if (winTop <= navTop) {
+			nav.removeClass('fixed')
+		}
+	});
+	//サブナビゲーション
+	$('li', nav).hover(function(){
+		$('ul',this).slideDown('fast');
+	},
+	function(){
+		$('ul',this).slideUp('fast');
+	});
+});
+</script>
+<link href="h08.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+<body>
+<div id="header"><a href="https://www.nies.go.jp/index.html" target="_blank"><img src="pictures/NIES_logo_01.png" alt="NIES" width="65" height="33" border="0" align="right" /></a>
+
+<a href="index.html"><img src="pictures/H08_logo_01.png" alt="2013 NIES Comference" width="251" height="116" border="0" /></a></div>
+<div class="nav"><ul class="clearfix">
+		<li><a href="index.html">HOME</a></li>
+		<li><a href="introduction.html">Introduction</a></li>
+		<li><a href="manual.html">Manuals</a></li>
+		<li><a href="sourcecode.html">Source code</a></li>
+		<li><a href="input.html">Input Data</a></li>
+       	<li><a href="bugs_update.html">Bugs &amp; Update</a></li>
+       	<li><a href="faq.html">FAQ</a></li>
+       	<li><a href="publication.html">Publications</a></li>
+       	<li><a href="viewer.html">Viewer</a></li>
+  </ul></div>
+<div id="e_j_box">
+  <div align="right">
+<a href="viewer.html">English</a> / <a href="viewer_j.html">Japanese </a></div>
+</div>
+<div id="image_picture">
+</div>
+<div id="article"><!-- /#article -->
+
+
+<h1>H08 Water Risk Tool</h1>
+<p>We are developing a viewer that displays the world's water risk index based on the latest simulation results from H08. There are two types of viewers: the Water Security Compass (WSC) and the H08 Water Risk Tool (WRT). The WSC was developed by the Research Initiative for Global Hydrologic Cycles at the University of Tokyo, and we recommend using this viewer unless there are particular circumstances. The WRT is a visualization of the results submitted by H08 to the international project Inter Sectoral Impact Model Intercomparison Project (ISIMIP). It has the advantage that the water risk indicators displayed correspond to the data on the <a href="https://data.isimip.org/" target="_blank">ISIMIP Repository</a>, but it is not recommended for the general use. <br></p>
+
+<li class="li_level1">Water Security Compass (WSC)</li>
+<li class="li_level2"> <a href="https://water-sc.diasjp.net/" target="_blank">Water Security Compass</a></li>
+<li class="li_level1">H08 Water Risk Tool</li>
+<li class="li_level2"> <a href="https://h08.nies.go.jp/viewer2022/" target="_blank">H08 Water Risk Tool (Shiny Edition; latest)</a></li>
+<li class="li_level2"> <a href="https://h08.nies.go.jp/~ddc/cgi-bin/viewer2021/" target="_blank">H08 Water Risk Tool (Google API Edition; outdated, but fully compatible with the paper.)</a></li>
+
+<li class="li_level2">H08 Water Risk Tool is described in detail in <a href="https://www.sciencedirect.com/science/article/pii/S240588072300047X" target="_blank">this</a> paper.</li>
+  
+</div>
+
+<div id="footer_box">
+  <div align="center">Copyright © 2013-2026 National Institute for Environmental Studies. All Rights Reserved.</div>
+</div>
+</body>
+</html>
