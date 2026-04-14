@@ -1,3 +1,0 @@
-H08のソースコードはApache License 2.0の下、公開されています。[2021/4/1より]
-
-The manuals, source code, and the global meteorological data server of H08 are freely available under Apache License 2.0 [From Apr 1 2021].
