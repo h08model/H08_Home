@@ -4,15 +4,12 @@
   <meta charset="UTF-8">
   <title>Page Moved</title>
 
-  <!-- Redirect after 5 seconds -->
-  <meta http-equiv="refresh" content="5;url=https://adaptation-platform.nies.go.jp/data/h08/publication.html">
   <style>
     body {
       font-family: sans-serif;
       margin: 40px;
     }
 
-    /* Language switch buttons */
     .lang-switch {
       position: fixed;
       top: 15px;
@@ -23,16 +20,15 @@
       margin-left: 5px;
       padding: 5px 10px;
       border: 1px solid #ccc;
-      background-color: #f5f5f5;
+      background: #f5f5f5;
       cursor: pointer;
     }
 
     .lang-switch button.active {
       font-weight: bold;
-      background-color: #e0e0e0;
+      background: #e0e0e0;
     }
 
-    /* Language blocks */
     .lang {
       display: none;
     }
@@ -44,38 +40,55 @@
 </head>
 <body>
 
-  <!-- Language Switch -->
+  <!-- 言語切り替え -->
   <div class="lang-switch">
     <button id="btn-en" class="active" onclick="switchLang('en')">English</button>
     <button id="btn-ja" onclick="switchLang('ja')">日本語</button>
   </div>
 
-  <!-- English -->
-  <div id="en" class="lang active">
-    <p>
-      This page has been moved.<br>
-      You will be redirected to the new page in 5 seconds.
-    </p>
-    <p>
-      If you are not redirected automatically, please click the link below:<br>
-      <a href="https://adaptation-platform.nies.go.jp/data/h08/publication.html">https://adaptation-platform.nies.go.jp/data/h08/publication.html</a>
-    </p>
-  </div>
-
-  <!-- Japanese -->
+  <!-- 日本語 -->
   <div id="ja" class="lang">
     <p>
       このページは移行しました。<br>
-      5秒後に新しいページへ移動します。
+      5秒後に日本語ページへ移動します。
     </p>
     <p>
-      自動的に移動しない場合は、以下のリンクをクリックしてください：<br>
+      自動的に移動しない場合はこちら：<br>
       <a href="https://adaptation-platform.nies.go.jp/data/h08/publication_j.html">https://adaptation-platform.nies.go.jp/data/h08/publication_j.html</a>
     </p>
   </div>
 
+  <!-- 英語 -->
+  <div id="en" class="lang active">
+    <p>
+      This page has been moved.<br>
+      You will be redirected to the English page in 5 seconds.
+    </p>
+    <p>
+      If you are not redirected automatically, click here:<br>
+      <a href="https://adaptation-platform.nies.go.jp/data/h08/publication.html">https://adaptation-platform.nies.go.jp/data/h08/publication.html</a>
+    </p>
+  </div>
+
   <script>
+    let currentLang = 'en';
+    let redirectTimer;
+
+    const redirectUrls = {
+      ja: 'https://adaptation-platform.nies.go.jp/data/h08/publication_j.html',
+      en: 'https://adaptation-platform.nies.go.jp/data/h08/publication.html'
+    };
+
+    function startRedirect() {
+      clearTimeout(redirectTimer);
+      redirectTimer = setTimeout(() => {
+        window.location.href = redirectUrls[currentLang];
+      }, 5000);
+    }
+
     function switchLang(lang) {
+      currentLang = lang;
+
       document.getElementById('ja').classList.remove('active');
       document.getElementById('en').classList.remove('active');
       document.getElementById('btn-ja').classList.remove('active');
@@ -83,7 +96,12 @@
 
       document.getElementById(lang).classList.add('active');
       document.getElementById('btn-' + lang).classList.add('active');
+
+      startRedirect(); // 言語切り替え時にタイマーをリセット
     }
+
+    // 初回ロード時
+    startRedirect();
   </script>
 
 </body>
