@@ -1,69 +1,108 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0
- Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta http-equiv="Content-Style-Type" content="text/css" />
-<meta http-equiv="Content-Script-Type" content="text/javascript" />
-<meta name="GENERATOR" content="JustSystems Homepage Builder Version 15.0.12.0 for Windows" />
-<title>H08 | Home</title>
+  <meta charset="UTF-8">
+  <title>Page Moved</title>
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
-<script type="text/javascript">
-$(function() {
-	var nav = $('.nav');	
-	var navTop = nav.offset().top;
-	$(window).scroll(function () {
-		var winTop = $(this).scrollTop();
-		if (winTop >= navTop) {
-			nav.addClass('fixed')
-		} else if (winTop <= navTop) {
-			nav.removeClass('fixed')
-		}
-	});
-	//サブナビゲーション
-	$('li', nav).hover(function(){
-		$('ul',this).slideDown('fast');
-	},
-	function(){
-		$('ul',this).slideUp('fast');
-	});
-});
-</script>
-<link href="h08.css" rel="stylesheet" type="text/css" />
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 40px;
+    }
 
+    .lang-switch {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+    }
 
+    .lang-switch button {
+      margin-left: 5px;
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      background: #f5f5f5;
+      cursor: pointer;
+    }
+
+    .lang-switch button.active {
+      font-weight: bold;
+      background: #e0e0e0;
+    }
+
+    .lang {
+      display: none;
+    }
+
+    .lang.active {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-<div id="header"><a href="https://www.nies.go.jp/index.html" target="_blank"><img src="pictures/NIES_logo_01.png" alt="NIES" width="65" height="33" border="0" align="right" /></a>
 
-<a href="index.html"><img src="pictures/H08_logo_01.png" alt="2013 NIES Comference" width="251" height="116" border="0" /></a></div>
-<div class="nav"><ul class="clearfix">
-		<li><a href="index.html">HOME</a></li>
-		<li><a href="introduction.html">Introduction</a></li>
-		<li><a href="manual.html">Manuals</a></li>
-		<li><a href="sourcecode.html">Source code</a></li>
-		<li><a href="input.html">Input Data</a></li>
-       	<li><a href="bugs_update.html">Bugs &amp; Update</a></li>
-       	<li><a href="faq.html">FAQ</a></li>
-       	<li><a href="publication.html">Publications</a></li>
-       	<li><a href="viewer.html">Viewer</a></li>
-  </ul></div>
-<div id="e_j_box">
-  <div align="right">
-<a href="index.html">English</a> / <a href="index_j.html">Japanese </a></div>
-</div>
-<div id="image_picture">
-</div>
-<div id="article"><!-- /#article -->
+  <!-- 言語切り替え -->
+  <div class="lang-switch">
+    <button id="btn-en" class="active" onclick="switchLang('en')">English</button>
+    <button id="btn-ja" onclick="switchLang('ja')">日本語</button>
+  </div>
 
-<h1>Welcome to H08 Home!</h1>
-<p>H08 is an open source global hydrological model, mainly developed by Dr. Naota Hanasaki at the National Institute for Environmental Studies, Japan. The manuals, source code, and the global meteorological data server of H08 are freely available under their terms and conditions. This web site is prepared for the users of H08, hence the contents are quite technical.</p>
-<p>Contact: Dr. Naota Hanasaki, Center for Climate Change Adaptation, National Institute for Environmental Studies (hanasaki at nies.go.jp)</p>
-</div>
+  <!-- 日本語 -->
+  <div id="ja" class="lang">
+    <p>
+      このページは移行しました。<br>
+      5秒後に日本語ページへ移動します。
+    </p>
+    <p>
+      自動的に移動しない場合はこちら：<br>
+      <a href="https://adaptation-platform.nies.go.jp/data/h08/index_j.html">https://adaptation-platform.nies.go.jp/data/h08/index_j.html</a>
+    </p>
+  </div>
 
-<div id="footer_box">
-  <div align="center">Copyright © 2013-2026 National Institute for Environmental Studies. All Rights Reserved.</div>
-</div>
+  <!-- 英語 -->
+  <div id="en" class="lang active">
+    <p>
+      This page has been moved.<br>
+      You will be redirected to the English page in 5 seconds.
+    </p>
+    <p>
+      If you are not redirected automatically, click here:<br>
+      <a href="https://adaptation-platform.nies.go.jp/data/h08/index.html">https://adaptation-platform.nies.go.jp/data/h08/index.html</a>
+    </p>
+  </div>
+
+  <script>
+    let currentLang = 'en';
+    let redirectTimer;
+
+    const redirectUrls = {
+      ja: 'https://adaptation-platform.nies.go.jp/data/h08/index_j.html',
+      en: 'https://adaptation-platform.nies.go.jp/data/h08/index.html'
+    };
+
+    function startRedirect() {
+      clearTimeout(redirectTimer);
+      redirectTimer = setTimeout(() => {
+        window.location.href = redirectUrls[currentLang];
+      }, 5000);
+    }
+
+    function switchLang(lang) {
+      currentLang = lang;
+
+      document.getElementById('ja').classList.remove('active');
+      document.getElementById('en').classList.remove('active');
+      document.getElementById('btn-ja').classList.remove('active');
+      document.getElementById('btn-en').classList.remove('active');
+
+      document.getElementById(lang).classList.add('active');
+      document.getElementById('btn-' + lang).classList.add('active');
+
+      startRedirect(); // 言語切り替え時にタイマーをリセット
+    }
+
+    // 初回ロード時
+    startRedirect();
+  </script>
+
 </body>
 </html>
